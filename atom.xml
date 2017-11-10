@@ -109,7 +109,7 @@
     <link href="http://yoursite.com/2017/11/07/%E4%BB%8A%E5%A4%A9%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2/"/>
     <id>http://yoursite.com/2017/11/07/今天开始写博客/</id>
     <published>2017-11-07T09:40:00.000Z</published>
-    <updated>2017-11-09T13:11:24.902Z</updated>
+    <updated>2017-11-10T01:27:12.958Z</updated>
     
     <content type="html"><![CDATA[<h1 id="忙了两天，总算把个人博客搭起来了"><a href="#忙了两天，总算把个人博客搭起来了" class="headerlink" title="忙了两天，总算把个人博客搭起来了"></a>忙了两天，总算把个人博客搭起来了</h1><h2 id="总之今天开始写博客了"><a href="#总之今天开始写博客了" class="headerlink" title="总之今天开始写博客了"></a>总之今天开始写博客了</h2><p>这里看起来可能很奇怪，恩，因为就是一个MarkDown的写法的练习。</p><p><em>说实话我才敢刚开始写，还不太习惯</em></p><p><strong>万事开头难。</strong></p><a id="more"></a><h3 id="从今天开始写博客"><a href="#从今天开始写博客" class="headerlink" title="从今天开始写博客"></a>从今天开始写博客</h3><blockquote><p>预期每周一篇</p><p>包括但不限于以下题材</p><ul><li><p>技术相关，机器学习编程啥的，某一个具体部分的详细介绍</p></li><li><p>读书笔记</p></li><li><p>文献阅读笔记</p></li><li><p>个人思考</p></li></ul><p>一周至少300字吧，不算多，写个计划可能都不止300字了（笑）。 </p></blockquote><img src="/2017/11/07/今天开始写博客/avatar.jpg" title="随手一个图片，但愿能正常显示">]]></content>
     
@@ -120,6 +120,10 @@
 &lt;p&gt;&lt;strong&gt;万事开头难。&lt;/strong&gt;&lt;/p&gt;
     
     </summary>
+    
+      <category term="Whatever" scheme="http://yoursite.com/categories/Whatever/"/>
+    
+      <category term="日记" scheme="http://yoursite.com/categories/Whatever/%E6%97%A5%E8%AE%B0/"/>
     
     
       <category term="Whatever" scheme="http://yoursite.com/tags/Whatever/"/>

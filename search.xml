@@ -38,6 +38,10 @@
     <title><![CDATA[今天开始写博客]]></title>
     <url>%2F2017%2F11%2F07%2F%E4%BB%8A%E5%A4%A9%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2%2F</url>
     <content type="text"><![CDATA[忙了两天，总算把个人博客搭起来了总之今天开始写博客了这里看起来可能很奇怪，恩，因为就是一个MarkDown的写法的练习。 说实话我才敢刚开始写，还不太习惯 万事开头难。 从今天开始写博客 预期每周一篇 包括但不限于以下题材 技术相关，机器学习编程啥的，某一个具体部分的详细介绍 读书笔记 文献阅读笔记 个人思考 一周至少300字吧，不算多，写个计划可能都不止300字了（笑）。]]></content>
+      <categories>
+        <category>Whatever</category>
+        <category>日记</category>
+      </categories>
       <tags>
         <tag>Whatever</tag>
       </tags>
