@@ -49,6 +49,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[Hexo Next如何置顶文章]]></title>
+    <url>%2F2017%2F11%2F10%2Ftop-post%2F</url>
+    <content type="text"><![CDATA[¶安装hexo-math 参考Netcan_Space博客 安装hexo-generator-index-pin-top，然后在Front-matter中加上top: true即可. 在\themes\next\layout\_macropost.swig下修改修改相应的效果。 Next主题自带Frongt-matter中使用Sticky: true的方式添加指定效果，但是在这篇博文写作的时候该方法只会将文章置顶到某一个页面的最上方。如果你的首页博客是一页最多显示10篇，而从时间上你要指定的文章排在第15篇，那么设定sticky会导致你的文章在/page/2中被置顶。 本博客使用的置顶效果是在post-sticky-flag和post-title-link之间加入 12345&#123;% if post.top &gt; 0 %&#125; &lt;span class=&quot;post-top-flag&quot; title=&quot;top&quot;&gt; &lt;font color=&quot;red&quot;&gt;[置顶]&lt;/font&gt; &lt;/span&gt;&#123;% endif %&#125;]]></content>
+      <categories>
+        <category>问题梳理</category>
+      </categories>
+      <tags>
+        <tag>Problem</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Node2vec: Scalable Feature Learning for Networks]]></title>
     <url>%2F2017%2F11%2F10%2Fpaper1%2F</url>
     <content type="text"><![CDATA[作者：Aditya Grover，Jure Leskovec 年份：2016 期刊：KDD 研究内容：Network Embedding。网络的特征学习和向量化表达，在multi-label classification和link prediction两个方面得到了有效性验证。 七月份精读过，不过当时没有记录太多。是一片适合作为random surfer model的入门之作。 主要方法： ¶Rrandom walk neighborhood sampling 获得圈子训练集。 当从节点t移动到节点v时，v移动到下一个节点x的概率由节点t到节点x的距离决定。 ¶Skip-gram训练得到的Embedding模型。 训练时，输入时初始的node u，输出的random walk采样到的neighbor nodes。类似于word2vec 中的输入时一个词，输出是上下文的词进行训练。 ¶结果展示 可以根据选择不同的步长和概率参数得到不同的结果，如发现社交圈子（上图），或者发现在网络结构中处在类似地位的节点（下图）。 借鉴意义：可对社交网络中用户节点转化成向量，然后计算用户节点与相连节点的相似性，作为亲密度度量的手段。 node2vec: Scalable Feature Learning for Networks]]></content>
@@ -58,17 +69,6 @@
       </categories>
       <tags>
         <tag>Social Networks</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Hexo Next如何置顶文章]]></title>
-    <url>%2F2017%2F11%2F10%2Ftop-post%2F</url>
-    <content type="text"><![CDATA[¶安装hexo-math 参考Netcan_Space博客 安装hexo-generator-index-pin-top，然后在Front-matter中加上top: true即可. 在\themes\next\layout\_macropost.swig下修改修改相应的效果。 Next主题自带Frongt-matter中使用Sticky: true的方式添加指定效果，但是在这篇博文写作的时候该方法只会将文章置顶到某一个页面的最上方。如果你的首页博客是一页最多显示10篇，而从时间上你要指定的文章排在第15篇，那么设定sticky会导致你的文章在/page/2中被置顶。 本博客使用的置顶效果是在post-sticky-flag和post-title-link之间加入 12345&#123;% if post.top &gt; 0 %&#125; &lt;span class=&quot;post-top-flag&quot; title=&quot;top&quot;&gt; &lt;font color=&quot;red&quot;&gt;[置顶]&lt;/font&gt; &lt;/span&gt;&#123;% endif %&#125;]]></content>
-      <categories>
-        <category>问题梳理</category>
-      </categories>
-      <tags>
-        <tag>Problem</tag>
       </tags>
   </entry>
   <entry>
