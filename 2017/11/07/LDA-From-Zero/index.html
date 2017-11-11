@@ -62,8 +62,6 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
-
 
 
 
@@ -81,19 +79,19 @@
 
 
 
-<meta name="description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型主题模型的一种，最早是由">
+<meta name="description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型的一种，最早是由Blei">
 <meta name="keywords" content="Machine Learning,Statistics">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从零开始学LDA（Latent Dirichlet allocation）">
 <meta property="og:url" content="http://yoursite.com/2017/11/07/LDA-From-Zero/index.html">
 <meta property="og:site_name" content="Aroslin">
-<meta property="og:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型主题模型的一种，最早是由">
+<meta property="og:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型的一种，最早是由Blei">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/1.jpg">
-<meta property="og:updated_time" content="2017-11-10T14:00:24.264Z">
+<meta property="og:updated_time" content="2017-11-11T03:10:40.820Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从零开始学LDA（Latent Dirichlet allocation）">
-<meta name="twitter:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型主题模型的一种，最早是由">
+<meta name="twitter:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型的一种，最早是由Blei">
 <meta name="twitter:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/1.jpg">
 
 
@@ -406,7 +404,7 @@
 <p>去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。</p>
 <p><font color="red"><strong>注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。</strong></font></p>
 </blockquote>
-<p>LDA(Latent Dirichlet allocation)是<a href="https://zh.wikipedia.org/wiki/%E4%B8%BB%E9%A2%98%E6%A8%A1%E5%9E%8B" target="_blank" rel="external">主题模型</a>主题模型的一种，最早是由Blei D M<sup>[1]</sup>等人在2003年提出的，常被用于文档的主题识别。时至今日，在大大小小的会议上仍能看到不少对LDA（或其衍生、或类似的主题模型）提出改进的文章。其自然的思路，优雅的求解和拓展性强的模型结构，实在是非常适合作为对无监督学习一个入门模型来学习和改进。</p>
+<p>LDA(Latent Dirichlet allocation)是<a href="https://zh.wikipedia.org/wiki/%E4%B8%BB%E9%A2%98%E6%A8%A1%E5%9E%8B" target="_blank" rel="external">主题模型</a>的一种，最早是由Blei D M<sup>[1]</sup>等人在2003年提出的，常被用于文档的主题识别。时至今日，在大大小小的会议上仍能看到不少对LDA（或其衍生、或类似的主题模型）提出改进的文章。其自然的思路，优雅的求解和拓展性强的模型结构，实在是非常适合作为对无监督学习一个入门模型来学习和改进。</p>
 <p>本文主要介绍LDA背后的相关数学知识和模型的构建与求解思路，力求只有少量统计知识的初学者也能看懂。文中略去了大量的公式推导细节，如果希望深入的了解，请根据需要查找相关的资料。</p>
 <a id="more"></a>
 <h2 id="从扔硬币说起"><a class="header-anchor" href="#从扔硬币说起">¶</a>从扔硬币说起</h2>
@@ -421,7 +419,7 @@
 <center>$$P(k|N,p)=C^k_N\cdot p^k\cdot (1-p)^{N-k}$$</center>
 其中p是硬币扔一次正面朝上的概率。真实场景中，我们面对的问题往往是，我想知道这个公式中的p是多少。一个我们熟悉且自然的思路是，把这个硬币扔N次，得到的结果中k次朝上的那么可以估计
 <center>$$p=\frac{k}{N}$$</center>
-如果你学过概率论，那么你就知道这是对二项分布中参数p的一个[极大似然估计。](https://zh.wikipedia.org/zh-hans/%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1)
+<p>如果你学过概率论，那么你就知道这是对二项分布中参数p的一个<a href="https://zh.wikipedia.org/zh-hans/%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1" target="_blank" rel="external">极大似然估计</a>。</p>
 <h3 id="贝叶斯估计"><a class="header-anchor" href="#贝叶斯估计">¶</a>贝叶斯估计</h3>
 <p>当我们像上面去估计p值的时候，其实已经默认了一个假设，就是p是一个定值，它在每次实验中都是相同的。p是一个客观存的量，只是我们不知道它是多少。这样的想法很容易理解，但有时候会带来一些问题。当我们扔了10次硬币，10次都朝上的时候（尽管概率很小，但这一现象也会发生），用上面的方法估计，p=1。这一结论和我们的常识不符，当全部出现正面朝上这种小概率事件时，我么可能会倾向认为p值比0.5大，但没有大到等于1。</p>
 <p>这时候，有些人就想，或许p并不是一个定值，而是服从某一种概率分布，对p的一个较好的估计是这个概率分布的<a href="https://zh.wikipedia.org/zh-hans/%E6%9C%9F%E6%9C%9B%E5%80%BC" target="_blank" rel="external">期望</a>，那么即使发生了每次都正面朝上的情况，只要这个概率分布不是始终等于1，就不会出现违背常识的情况了。</p>
