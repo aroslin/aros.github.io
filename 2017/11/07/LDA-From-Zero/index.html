@@ -88,7 +88,8 @@
 <meta property="og:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型的一种，最早是由Blei">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/1.jpg">
-<meta property="og:updated_time" content="2017-11-11T03:10:40.820Z">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/2.png">
+<meta property="og:updated_time" content="2017-11-12T14:11:34.846Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从零开始学LDA（Latent Dirichlet allocation）">
 <meta name="twitter:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型的一种，最早是由Blei">
@@ -415,16 +416,16 @@
 <p>摘自<a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E9%A0%85%E5%88%86%E4%BD%88" target="_blank" rel="external">二项分布维基百科</a></p>
 </blockquote>
 <p>扔一枚硬币，一共扔N次，其中k次都是正面朝上的概率是多少？
-这个概率服从二项分布(Bernoulli distribution)</p>
-<center>$$P(k|N,p)=C^k_N\cdot p^k\cdot (1-p)^{N-k}$$</center>
-其中p是硬币扔一次正面朝上的概率。真实场景中，我们面对的问题往往是，我想知道这个公式中的p是多少。一个我们熟悉且自然的思路是，把这个硬币扔N次，得到的结果中k次朝上的那么可以估计
-<center>$$p=\frac{k}{N}$$</center>
+这个概率服从二项分布(Bernoulli distribution)
+$$P(k|N,p)=C^k_N\cdot p^k\cdot (1-p)^{N-k}$$
+其中p是硬币扔一次正面朝上的概率。真实场景中，我们面对的问题往往是，我想知道这个公式中的p是多少。一个我们熟悉且自然的思路是，把这个硬币扔N次，得到的结果中k次朝上的那么可以估计</p>
+<p>$$p=\frac{k}{N}$$</p>
 <p>如果你学过概率论，那么你就知道这是对二项分布中参数p的一个<a href="https://zh.wikipedia.org/zh-hans/%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1" target="_blank" rel="external">极大似然估计</a>。</p>
 <h3 id="贝叶斯估计"><a class="header-anchor" href="#贝叶斯估计">¶</a>贝叶斯估计</h3>
 <p>当我们像上面去估计p值的时候，其实已经默认了一个假设，就是p是一个定值，它在每次实验中都是相同的。p是一个客观存的量，只是我们不知道它是多少。这样的想法很容易理解，但有时候会带来一些问题。当我们扔了10次硬币，10次都朝上的时候（尽管概率很小，但这一现象也会发生），用上面的方法估计，p=1。这一结论和我们的常识不符，当全部出现正面朝上这种小概率事件时，我么可能会倾向认为p值比0.5大，但没有大到等于1。</p>
 <p>这时候，有些人就想，或许p并不是一个定值，而是服从某一种概率分布，对p的一个较好的估计是这个概率分布的<a href="https://zh.wikipedia.org/zh-hans/%E6%9C%9F%E6%9C%9B%E5%80%BC" target="_blank" rel="external">期望</a>，那么即使发生了每次都正面朝上的情况，只要这个概率分布不是始终等于1，就不会出现违背常识的情况了。</p>
 <p>怎么理解？这就好比说，你扔出的硬币在落下的一瞬间之前，在你无法感知的空间中散落成无数的硬币，这些硬币的密度不尽相同，也就是落下时的p是不同的，但这些p是的有约束的，都是服从某一概率分布。在降落的一瞬间，有且仅有一枚硬币投射到你感知到的硬币上，也就是这一次抛硬币对应的p。由于无数硬币的p值并不是都等于1，所以即使出现扔硬币多次全部正面朝上，也可以理解成这些硬币中p值较大的硬币比较多，而不会是所有硬币的p都等于1。</p>
-<img src="/2017/11/07/LDA-From-Zero/1.jpg" title="无限硬币">
+<img src="/2017/11/07/LDA-From-Zero/1.jpg" title="Figure 1. 无限硬币">
 <p>如果你觉得上面这略显中二的说法也不太好理解的话😑，我们就直接看知识点好了。根据伯努利试验中p值是否固定，划分出了两个学派——频率学派和贝叶斯学派。这两个学派的思路差异主要体现在：</p>
 <blockquote>
 <ul>
@@ -433,29 +434,22 @@
 </ul>
 </blockquote>
 <p>在贝叶斯学派看来，所有的参数都不是固定值，而是服从一个概率分布，而对这个概率分布的估计有一个经典的模式：</p>
-<center>先验分布𝜋(𝜃)+样本信息Χ⇒后验分布𝜋(𝜃|𝑥)</center>
-<p>上述思考模式意味着，新观察到的样本信息将修正人们以前对事物的认知。换言之，在得到新的样本信息之前，人们对的认知是先验分布𝜋(𝜃)，在得到新的样本信息Χ后，人们对的认知为𝜋(𝜃|𝑥)。</p>
+<p>先验分布𝜋(𝜃)+样本信息Χ⇒后验分布𝜋(𝜃|𝑥)</p>
+<p>上述思考模式意味着，新观察到的样本信息将修正人们以前对事物的认知。换言之，在得到新的样本信息之前，人们对的认知是先验分布$𝜋(𝜃)$，在得到新的样本信息Χ后，人们对的认知为$𝜋(𝜃|𝑥)$。而这里求解$𝜋(𝜃|𝑥)$最重要依据就是贝叶斯公式（条件概率公式）
+$$P(𝜃,𝑋)=P(𝜃│𝑋)∙P(𝑋)=P(𝑋|𝜃)∙P(𝜃)$$</p>
 <p>举个例子来说明两个学派分析的思路差异好了。加入我们扔一枚硬币，连续扔10次，有6次出现了正面朝上，那么扔一次正面朝上的概率是多少？</p>
-<p>按照频率学派的观点，</p>
-<center>$$p=\frac{6}{10}=0.6$$</center>
+<p>按照频率学派的观点，
+$$p=\frac{6}{10}=0.6$$</p>
 <p>按照贝叶斯学派，首先p有一个先验分布，也就是你对p的一个经验估计，为了计算简单和表达的方便，咱们这里取一个离散分布,令$𝜃=p=0.4,0.5,0.6$，且</p>
 <blockquote>
 <p>$P(𝜃=0.4)=0.1$</p>
 <p>$P(𝜃=0.5)=0.8$</p>
 <p>$P(𝜃=0.6)=0.1$</p>
 </blockquote>
-<p>先验分布的期望</p>
-<blockquote>
-<center>$$E(𝜃)=0.4\cdot0.1+0.5\cdot0.8+0.6\cdot0.1=0.5$$</center>
-</blockquote>
-<p>根据样本信息，10次中有6次朝上，由条件概率公式</p>
-<blockquote>
-<center>$$P(𝜃,𝑋)=P(𝜃│𝑋)∙P(𝑋)=P(𝑋|𝜃)∙P(𝜃)$$</center>
-</blockquote>
-<p>变形得到，在该样本条件下，$𝜃=6$的概率为</p>
-<blockquote>
-<center>$$𝑝(𝜃=0.6│𝑋=6)=\frac{𝑝(𝑋=6|𝜃=0.6)\cdot𝑝(𝜃=0.6)}{𝑝(𝑋=6)} $$</center>
-</blockquote>
+<p>先验分布的期望
+$$E(𝜃)=0.4\cdot0.1+0.5\cdot0.8+0.6\cdot0.1=0.5$$</p>
+<p>根据样本信息，10次中有6次朝上，由贝叶斯公式变形可以得到，在该样本条件下，$𝜃=6$的概率为</p>
+<p>$$𝑝(𝜃=0.6│𝑋=6)=\frac{𝑝(𝑋=6|𝜃=0.6)\cdot𝑝(𝜃=0.6)}{𝑝(𝑋=6)} $$</p>
 <p>其中：</p>
 <ul>
 <li>$𝜃$就是抛一次硬币是正面的概率，X是正面的次数，在本例中就是6；</li>
@@ -470,11 +464,58 @@
 <p>$P(𝜃=0.5|X=6)=0.819$</p>
 <p>$P(𝜃=0.6|X=6)=0.125$</p>
 </blockquote>
-<p>后验分布的期望</p>
-<blockquote>
-<center>$$E(𝜃|X=6)=0.4\cdot0.056+0.5\cdot0.819+0.6\cdot0.125=0.5069$$</center>
-</blockquote>
+<p>后验分布的期望
+$$E(𝜃|X=6)=0.4\cdot0.056+0.5\cdot0.819+0.6\cdot0.125=0.5069$$</p>
 <p>可以看到，后验分布的概率变得比0.5大了，而且并没有大很多。由于这里先验分布取的很特殊，哪怕出现无穷多次都是正面朝上的情况，后验分布的期望也只会逼近0.6。</p>
+<h3 id="beta分布与共轭"><a class="header-anchor" href="#beta分布与共轭">¶</a>Beta分布与共轭</h3>
+<p>上面的例子中，我们选取了一个离散分布作为先验分布，可以看出这个离散分布限定了p只能取三个值，得到的后验分布期望所在的区间也十分有限，选取这个分布并不太合适。数学家们给出了一个很漂亮的分布——<a href="https://zh.wikipedia.org/zh-hans/%CE%92%E5%88%86%E5%B8%83" target="_blank" rel="external">Beta分布</a>，来作为二项分布的先验分布。为什么选取Beta分布呢？主要是因为两点：</p>
+<blockquote>
+<ul>
+<li>Beta分布形态多变，可以满足多种情况下的分布。</li>
+<li>Beta分布做先验分布，样本信息服从二项分布时，两种分布符合良好的特性可以简化计算。</li>
+</ul>
+</blockquote>
+<p>为了更好的理解Beat分布与二项分布的关系，我们先来看一下Beta分布的表达式。
+$$p(\theta)=Beta(\theta|\alpha,\beta)=\frac{\theta^{\alpha-1}\cdot (1-\theta)^{\beta-1}}{B(\alpha,\beta)},$$
+$$B(\alpha,\beta)=\int<sup>1_0t</sup>{\alpha-1}(1-t)^{\beta-1}dt$$</p>
+<!---
+其中$B(\alpha,\beta)$也可以写成
+
+$$B(\alpha,\beta)=\frac{\Gamma (\alpha)\cdot \Gamma (\beta)}{\Gamma (\alpha+\beta)},$$
+$$\Gamma (n)=\int^\infty_0t^{n-1}e^{-t}dt=(n-1)!$$
+
+两种写法之间的等价性就不在这里证明了。根据下面一种写法我们知道
+
+$$B(\alpha,\beta)=\frac{(\alpha-1)!\cdot (\beta-1)!}{(\alpha+\beta-2)!}$$
+-->
+<p>公式中$\alpha$和$\beta$是Beta分布的两个超参数，通过调整$\alpha$和$\beta$的大小可以调整Beta分布的形态，如下图所示。</p>
+<img src="/2017/11/07/LDA-From-Zero/2.png" title="Figure 2. Beta分布">
+<p>由图像我们不难看出，改变$\alpha$和$\beta$可以得到丰富的Beta分布的形式，得到不同的期望与分布的均匀程度，可以满足很多的分析场景。这是我们提到的选取Beta分布作为先验分布的第一点原因。</p>
+<p>那么，它与二项分布的关系呢？我么不妨来求一下先验分布是Beta分布，样本服从二项分布的情况下，后验分布是什么样子的。如果先验分布是Beta分布</p>
+<p>$$p(\theta)=Beta(\theta|\alpha,\beta)=\frac{\theta^{\alpha-1}\cdot (1-\theta)^{\beta-1}}{B(\alpha,\beta)}$$</p>
+<p>样本服从二项分布</p>
+<p>$$P(X|\theta)=C^k_N\cdot \theta^k\cdot (1-\theta)^{N-k}$$</p>
+<p>那么根据贝叶斯公式，后验分布满足</p>
+<span>$$\begin{align} 
+p(\theta|X) &amp; =\frac{p(X|\theta)\cdot p(\theta)}{p(X)}\\\\
+&amp; =\frac{p(X|\theta)\cdot p(\theta)}{\int p(X|\theta)\cdot p(\theta)d\theta}\\\\
+&amp; =\frac{(C^k_N\cdot \theta^k\cdot (1-\theta)^{N-k})\cdot(\frac{\theta^{\alpha-1}\cdot (1-\theta)^{\beta-1}}{B(\alpha,\beta)})}{\int (C^k_N\cdot \theta^k\cdot (1-\theta)^{N-k})\cdot (\frac{\theta^{\alpha-1}\cdot (1-\theta)^{\beta-1}}{B(\alpha,\beta)})d\theta}\\\\
+&amp; =\frac{\frac{C^k_N}{B(\alpha,\beta)}\cdot \theta^{\alpha+k-1}\cdot (1-\theta)^{\beta+N-k-1}}{\frac{C^k_N}{B(\alpha,\beta)}\cdot \int \theta^{\alpha+k-1}\cdot (1-\theta)^{\beta+N-k-1}d\theta}\\\\
+&amp; =\frac {\theta^{\alpha+k-1}\cdot (1-\theta)^{\beta+N-k-1}}{B(\theta|\alpha+k,\beta+(N-k))}\\\\
+&amp;= Beta(\theta|\alpha+k,\beta+(N-k))
+\end{align}$$</span><!-- Has MathJax -->
+<p>得到的仍然是一个Beta分布！也就是说，在先验分布是Beta分布的情况下，如果样本服从二项分布，那么后验分布也是Beta分布。在贝叶斯估计中，将这种根据样本求得的后验分布与先验分布的分布形式一致时，样本服从的分布与先验分布共称为<a href="https://zh.wikipedia.org/zh-hans/%E5%85%B1%E8%BD%AD%E5%85%88%E9%AA%8C" target="_blank" rel="external"><strong>共轭分布</strong></a>。将上面的式子我们简化的记为</p>
+<p>Beta(\theta|\alpha,\beta)+BinomCount(k,N-k)=Beta(\theta|\alpha+k,\beta+N-k)</p>
+<p>共轭是一个非常好的特性。在之前的先验分布是离散分布的例子中，我们需要把每一步都求解出来才能知道后验分布的期望是多少，但是如果先验分布是Beta分布，我们只需要会求Beta分布的期望，就能很快的得到后验分布的期望了。</p>
+<p>事实上，$Beta(\theta|\alpha,\beta)$的期望非常好求（这里就不推导公式了）</p>
+<p>$$E(Beta(\theta|\alpha,\beta))=\frac{\alpha}{\alpha+\beta}$$</p>
+<p>等下，这个结果是不是有点眼熟？如果我们另$\alpha=k,\beta=N-k$，在扔硬币的试验中，Beta的期望，也就是对p值的估计就变成了</p>
+<p>$$E(Beta(\theta|k,N-k))=\frac{k}{N}$$</p>
+<p>和频率学派对p值得估计统一起来了！从这里我们可以看出超参数$\alpha,\beta$的物理意义实际上就是扔硬币实验中正面朝上负面朝上的次数。根据我们的经验，我们认为p值应该是0.5，那么我们可以设先验Beta分布中$\alpha=\beta=1$，十次实验全部正面朝上，后验Beta分布的期望，也就是对p值的估计$E(\theta)=11/12$，一个接近1但不等于1的数。甚至，如果你对p值等于0.5非常有自信，你可以先验Beta分布中$\alpha=\beta=100$，那么十次实验全部正面朝上的话，$E(\theta)=101/102$，对p值的估计仍在0.5左右。记住这一点，对理解共轭的特性和Beta分布的含义有较大的帮助。</p>
+<blockquote>
+<p>Beta分布是分布的分布，它与二项分布共轭。在Beta分布中，超参数$\alpha,\beta$物理含义是伯努利试验中两种结果发生的次数，它们比值决定了Beta分布的期望，他们的大小决定了样本对后验分布的影响程度。</p>
+</blockquote>
+<h3 id="多项分布与dirichlet共轭"><a class="header-anchor" href="#多项分布与dirichlet共轭">¶</a>多项分布与Dirichlet共轭</h3>
 <blockquote>
 <p>[1]Blei D M, Ng A Y, Jordan M I. Latent dirichlet allocation[J]. Journal of machine Learning research, 2003, 3(Jan): 993-1022.]</p>
 </blockquote>
@@ -775,7 +816,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#从扔硬币说起"><span class="nav-number">1.</span> <span class="nav-text">¶从扔硬币说起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二项分布"><span class="nav-number">1.1.</span> <span class="nav-text">¶二项分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贝叶斯估计"><span class="nav-number">1.2.</span> <span class="nav-text">¶贝叶斯估计</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#从扔硬币说起"><span class="nav-number">1.</span> <span class="nav-text">¶从扔硬币说起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二项分布"><span class="nav-number">1.1.</span> <span class="nav-text">¶二项分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贝叶斯估计"><span class="nav-number">1.2.</span> <span class="nav-text">¶贝叶斯估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#beta分布与共轭"><span class="nav-number">1.3.</span> <span class="nav-text">¶Beta分布与共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项分布与dirichlet共轭"><span class="nav-number">1.4.</span> <span class="nav-text">¶多项分布与Dirichlet共轭</span></a></li></ol></li></ol></div>
             
 
           </div>
