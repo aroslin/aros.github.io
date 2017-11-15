@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/1.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/2.png">
-<meta property="og:updated_time" content="2017-11-12T14:11:34.846Z">
+<meta property="og:updated_time" content="2017-11-13T13:01:00.588Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从零开始学LDA（Latent Dirichlet allocation）">
 <meta name="twitter:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型的一种，最早是由Blei">
@@ -477,7 +477,7 @@ $$E(𝜃|X=6)=0.4\cdot0.056+0.5\cdot0.819+0.6\cdot0.125=0.5069$$</p>
 </blockquote>
 <p>为了更好的理解Beat分布与二项分布的关系，我们先来看一下Beta分布的表达式。
 $$p(\theta)=Beta(\theta|\alpha,\beta)=\frac{\theta^{\alpha-1}\cdot (1-\theta)^{\beta-1}}{B(\alpha,\beta)},$$
-$$B(\alpha,\beta)=\int<sup>1_0t</sup>{\alpha-1}(1-t)^{\beta-1}dt$$</p>
+$$B(\alpha,\beta)=\int^1_0 t^{\alpha-1} (1-t)^{\beta-1}dt$$</p>
 <!---
 其中$B(\alpha,\beta)$也可以写成
 
@@ -505,7 +505,7 @@ p(\theta|X) &amp; =\frac{p(X|\theta)\cdot p(\theta)}{p(X)}\\\\
 &amp;= Beta(\theta|\alpha+k,\beta+(N-k))
 \end{align}$$</span><!-- Has MathJax -->
 <p>得到的仍然是一个Beta分布！也就是说，在先验分布是Beta分布的情况下，如果样本服从二项分布，那么后验分布也是Beta分布。在贝叶斯估计中，将这种根据样本求得的后验分布与先验分布的分布形式一致时，样本服从的分布与先验分布共称为<a href="https://zh.wikipedia.org/zh-hans/%E5%85%B1%E8%BD%AD%E5%85%88%E9%AA%8C" target="_blank" rel="external"><strong>共轭分布</strong></a>。将上面的式子我们简化的记为</p>
-<p>Beta(\theta|\alpha,\beta)+BinomCount(k,N-k)=Beta(\theta|\alpha+k,\beta+N-k)</p>
+<p>$$Beta(\theta|\alpha,\beta)+BinomCount(k,N-k)=Beta(\theta|\alpha+k,\beta+N-k)$$</p>
 <p>共轭是一个非常好的特性。在之前的先验分布是离散分布的例子中，我们需要把每一步都求解出来才能知道后验分布的期望是多少，但是如果先验分布是Beta分布，我们只需要会求Beta分布的期望，就能很快的得到后验分布的期望了。</p>
 <p>事实上，$Beta(\theta|\alpha,\beta)$的期望非常好求（这里就不推导公式了）</p>
 <p>$$E(Beta(\theta|\alpha,\beta))=\frac{\alpha}{\alpha+\beta}$$</p>
@@ -516,6 +516,20 @@ p(\theta|X) &amp; =\frac{p(X|\theta)\cdot p(\theta)}{p(X)}\\\\
 <p>Beta分布是分布的分布，它与二项分布共轭。在Beta分布中，超参数$\alpha,\beta$物理含义是伯努利试验中两种结果发生的次数，它们比值决定了Beta分布的期望，他们的大小决定了样本对后验分布的影响程度。</p>
 </blockquote>
 <h3 id="多项分布与dirichlet共轭"><a class="header-anchor" href="#多项分布与dirichlet共轭">¶</a>多项分布与Dirichlet共轭</h3>
+<p>好的，下面我们来把二项分布推广吧。想象硬币就是一个“二面体”，它的每一面朝上的事件都会发生，而且发生的概率并不相同，对二项分布</p>
+<p>$$P(k|N,p)=C^k_N\cdot p^k\cdot (1-p)^{N-k}$$
+令$x_1=k$，$x_2=N-k$，$p_1=p$，$p_2=1-p$，$\vec{x}=(x_1.x_2)$，$\vec{p}=(p_1,p_2)$那么上式可以改写为</p>
+<p>$$p(\vec{x}|N,\vec{p})=\frac{N!}{x_1!\cdot x_2!}\cdot p^{x_1}_1\cdot p^{x_2}_2$$</p>
+<p>这里式子的形式已经很清楚了。如果我们抛一个k面的多面体，一共抛N次，每个面朝上的次数为$\vec{x}$，每个面朝上的概率为$\vec{p}$,那么对应的概率就是<a href="https://en.wikipedia.org/wiki/Multinomial_distribution" target="_blank" rel="external">多项分布</a></p>
+<p>$$p(\vec{x}|N,\vec{p})=\frac{N!}{\prod_i^ kx_i}\cdot \coprod_{i}^ {k}p ^{x_i}_i$$</p>
+<p>与多项分布共轭的分布就是<a href="https://zh.wikipedia.org/zh-hans/%E7%8B%84%E5%88%A9%E5%85%8B%E9%9B%B7%E5%88%86%E5%B8%83" target="_blank" rel="external">Dirchlet分布</a></p>
+<p>$$p(\vec{x})=Dir(\vec{x}|\vec{\alpha})=\frac{1}{\Delta (\vec{\alpha})}\coprod_{i}^ {k}x_i ^{\alpha_i-1}
+\Delta (\vec{\alpha})=\int\coprod_{i} ^ {k}x ^{\alpha-1}_id \vec {x}$$</p>
+<p>Dirchlet分布与多项分布的共轭也满足我们之前说的漂亮的性质</p>
+<p>$$Dir(\vec{x}|\vec{\alpha})+MultCount(\vec{m})=Dir(\vec{x}|\vec{\alpha}+\vec{m})$$</p>
+<p>而Dirchlet分布的期望等于</p>
+<p>$$E(\vec{p})=(\frac{\alpha_1}{\sum_{k}^{i}\alpha_i},\frac{\alpha_2}{\sum_{k} ^ {i}\alpha_i}, \ldots ,\frac{\alpha_N}{\sum_{k} ^{i}\alpha_i})$$</p>
+<p>多项分布与Dirihlet分布是整个LDA模型构建的基础。了解它们的特性对于理解和改进LDA模型会有很大的帮助。至于LDA模型到底是什么，我们下节继续。</p>
 <blockquote>
 <p>[1]Blei D M, Ng A Y, Jordan M I. Latent dirichlet allocation[J]. Journal of machine Learning research, 2003, 3(Jan): 993-1022.]</p>
 </blockquote>
@@ -738,7 +752,7 @@ p(\theta|X) &amp; =\frac{p(X|\theta)\cdot p(\theta)}{p(X)}\\\\
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

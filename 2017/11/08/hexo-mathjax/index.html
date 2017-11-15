@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="¶安装hexo-math hexo-math的github有详细的教程，主要就是两点。 一是安装  npm install hexo-math --save  二是在站点“_config.yml”中配置 1234567891011math:  engine: &apos;mathjax&apos; # or &apos;katex&apos;  mathjax:    src: custom_mathjax_source    conf">
+<meta name="description" content="¶安装hexo-math hexo-math的github有详细的教程，主要就是两点。 一是安装  npm install hexo-math --save  二是在站点_config.yml中配置 1234567891011math:  engine: &apos;mathjax&apos; # or &apos;katex&apos;  mathjax:    src: custom_mathjax_source    config">
 <meta name="keywords" content="Problem">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo写博客编辑公式相关问题">
 <meta property="og:url" content="http://yoursite.com/2017/11/08/hexo-mathjax/index.html">
 <meta property="og:site_name" content="Aroslin">
-<meta property="og:description" content="¶安装hexo-math hexo-math的github有详细的教程，主要就是两点。 一是安装  npm install hexo-math --save  二是在站点“_config.yml”中配置 1234567891011math:  engine: &apos;mathjax&apos; # or &apos;katex&apos;  mathjax:    src: custom_mathjax_source    conf">
+<meta property="og:description" content="¶安装hexo-math hexo-math的github有详细的教程，主要就是两点。 一是安装  npm install hexo-math --save  二是在站点_config.yml中配置 1234567891011math:  engine: &apos;mathjax&apos; # or &apos;katex&apos;  mathjax:    src: custom_mathjax_source    config">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-09T13:10:41.410Z">
+<meta property="og:updated_time" content="2017-11-13T12:11:24.177Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo写博客编辑公式相关问题">
-<meta name="twitter:description" content="¶安装hexo-math hexo-math的github有详细的教程，主要就是两点。 一是安装  npm install hexo-math --save  二是在站点“_config.yml”中配置 1234567891011math:  engine: &apos;mathjax&apos; # or &apos;katex&apos;  mathjax:    src: custom_mathjax_source    conf">
+<meta name="twitter:description" content="¶安装hexo-math hexo-math的github有详细的教程，主要就是两点。 一是安装  npm install hexo-math --save  二是在站点_config.yml中配置 1234567891011math:  engine: &apos;mathjax&apos; # or &apos;katex&apos;  mathjax:    src: custom_mathjax_source    config">
 
 
 
@@ -404,13 +404,36 @@
 <blockquote>
 <p>npm install hexo-math --save</p>
 </blockquote>
-<p>二是在站点“_config.yml”中配置</p>
+<p>二是在站点<code>_config.yml</code>中配置</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">math:</span><br><span class="line">  engine: <span class="string">'mathjax'</span> <span class="comment"># or 'katex'</span></span><br><span class="line">  mathjax:</span><br><span class="line">    src: custom_mathjax_source</span><br><span class="line">    config:</span><br><span class="line">      <span class="comment"># MathJax config</span></span><br><span class="line">  katex:</span><br><span class="line">    css: custom_css_source</span><br><span class="line">    js: custom_js_source <span class="comment"># not used</span></span><br><span class="line">    config:</span><br><span class="line">     <span class="comment"># KaTeX config</span></span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<p>值得一提的是，如果你是用的是Next主题，那么你还需要在\themes\next\下的“_config.yml”中配置启用mathjax，否则是不会生效的。（我这里弄了好久，还以为各种装错了，最是还是看了<a href="http://zjubank.com/2016/08/16/hexo-use-mathjax/" target="_blank" rel="external">参考链接</a>才找到问题）</p>
+<p>值得一提的是，如果你是用的是Next主题，那么你还需要在\themes\next\下的<code>_config.yml</code>中配置启用mathjax，否则是不会生效的。（我这里弄了好久，还以为各种装错了，最是还是看了<a href="http://zjubank.com/2016/08/16/hexo-use-mathjax/" target="_blank" rel="external">参考链接</a>才找到问题）</p>
 <pre><code>mathjax:
-  enable: true</code></pre>
-
+  enable: true
+</code></pre>
+<h2 id="多行公式"><a class="header-anchor" href="#多行公式">¶</a>多行公式</h2>
+<p>如果使用的是hexo-math,写多行公式要使用</p>
+<pre><code class="language-bash">{% math %}
+\begin{align} 
+\end{align}
+{% endmath %}
+</code></pre>
+<p>的方式。Latex语法<code>\\</code>换行，<code>&amp;</code>打在等号前进行对齐。<strong>特别需要注意的是，换行时要写<code>\\\\</code>，因为<code>\\</code>会被认为是转义字符<code>\</code></strong>。
+如</p>
+<pre><code class="language-bash">{% math %}
+\begin{align} 
+y &= x_1+x_2 \\\\
+&=1+2 \\\\
+&=3
+\end{align}
+{% endmath %}
+</code></pre>
+<p>的显示效果是</p>
+<span>$$\begin{align} 
+y &amp; = x_1+x_2 \\\\
+&amp; =1+2 \\\\
+&amp; =3
+\end{align}$$</span><!-- Has MathJax -->
       
     </div>
     
@@ -627,7 +650,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -705,7 +728,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装hexo-math"><span class="nav-number">1.</span> <span class="nav-text">¶安装hexo-math</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装hexo-math"><span class="nav-number">1.</span> <span class="nav-text">¶安装hexo-math</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多行公式"><span class="nav-number">2.</span> <span class="nav-text">¶多行公式</span></a></li></ol></div>
             
 
           </div>
