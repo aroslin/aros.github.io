@@ -94,7 +94,12 @@
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/5.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/6.png">
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/7.png">
-<meta property="og:updated_time" content="2017-11-21T13:49:21.246Z">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/8.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/10.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/9.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/11.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/12.png">
+<meta property="og:updated_time" content="2017-12-04T13:28:30.949Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从零开始学LDA（Latent Dirichlet allocation）">
 <meta name="twitter:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型的一种，最早是由Blei">
@@ -529,8 +534,8 @@ p(\theta|X) &amp; =\frac{p(X|\theta)\cdot p(\theta)}{p(X)}\\\\
 <p>$$p(\vec{x}|N,\vec{p})=\frac{N!}{\prod_i^ kx_i}\cdot \coprod_{i}^ {k}p ^{x_i}_i$$</p>
 <img src="/2017/11/07/LDA-From-Zero/3.png" title="Figure 3. 多面体">
 <p>与多项分布共轭的分布就是<a href="https://zh.wikipedia.org/zh-hans/%E7%8B%84%E5%88%A9%E5%85%8B%E9%9B%B7%E5%88%86%E5%B8%83" target="_blank" rel="external">Dirchlet分布</a></p>
-<p>$$p(\vec{x})=Dir(\vec{x}|\vec{\alpha})=\frac{1}{\Delta (\vec{\alpha})}\coprod_{i}^ {k}x_i ^{\alpha_i-1}
-\Delta (\vec{\alpha})=\int\coprod_{i} ^ {k}x ^{\alpha-1}_id \vec {x}$$</p>
+<p>$$p(\vec{x})=Dir(\vec{x}|\vec{\alpha})=\frac{1}{\Delta (\vec{\alpha})}\coprod_{i}^ {k}x_i ^{\alpha_i-1}$$
+$$\Delta (\vec{\alpha})=\int\coprod_{i} ^ {k}x ^{\alpha-1}_id \vec {x}$$</p>
 <p>Dirchlet分布与多项分布的共轭也满足我们之前说的漂亮的性质</p>
 <p>$$Dir(\vec{x}|\vec{\alpha})+MultCount(\vec{m})=Dir(\vec{x}|\vec{\alpha}+\vec{m})$$</p>
 <p>而Dirchlet分布的期望等于</p>
@@ -554,11 +559,19 @@ p(\theta|X) &amp; =\frac{p(X|\theta)\cdot p(\theta)}{p(X)}\\\\
 <p>假设：只有一个多面体，这个多面体有N面，每个面代表一个词；每个面的朝上的概率不尽相同。</p>
 <hr>
 <p>过程：</p>
-<p>1.选定文档的词语数量N；</p>
+<p>1.选定文档的词语数量M；</p>
 <p>2.抛掷多面体，记录朝上的面对应的词；</p>
-<p>3.重复步骤2， N次，直到所有词都生成。</p>
+<p>3.重复步骤共M次，直到所有词都生成。</p>
 <hr>
 </blockquote>
+<p>由生成过程我们知道，当一篇文档每一个词确定下来之后得到$\vec{w}=(w_1,\cdots,w_V)$，则该文档的生成概率为</p>
+<p>$$p(\vec{w})=p(w_1)\cdots p(w_V)$$</p>
+<p>如果语料库中有M篇文档，那么语料库$W=(\vec{w}_1)\cdots \vec{w}_M$生成的概率为</p>
+<p>$$p(W)=p(\vec{w}_1)\cdots p(\vec{w}_M)$$</p>
+<p>假如语料库中的无重复的词语数量是N，每一个词在所有文档中出现的次数为$n_i$，那么$\vec{n}=(n_1,\cdots,n_N)$正好是一个多项分布，整个语料库生成的概率为
+$$p(W)=p(\vec{n})=Mult(\vec{n}|\vec{p},N)=\coprod _{i=1} ^{N} p_i ^{n_i}$$</p>
+<p>这里，对每一个参数$p_k$的一个估计值就是</p>
+<p>$$\hat{p_i}=\frac{n_i}{N}$$</p>
 <p>当然，别忘记了贝叶斯估计，如果给这个多面体每个面朝上的概率一个先验分布$Dir(\vec{p}| \vec{\alpha})$，那么就可以轻松地根据样本信息 $\vec{n}$ 来估计后验分布$Dir(\vec{p}| \vec{\alpha}+\vec{n})$了。它的概率图模型如下图所示。</p>
 <img src="/2017/11/07/LDA-From-Zero/5.jpg" title="Figure 5. Unigram Model概率图模型">
 <blockquote>
@@ -571,6 +584,14 @@ p(\theta|X) &amp; =\frac{p(X|\theta)\cdot p(\theta)}{p(X)}\\\\
 <li>相同参数采样得到的独立同分布的变量放在一个方框里，并在方框中标注变量数量</li>
 </ul>
 </blockquote>
+<p>这里，我们不难根据之前Normalizer的定义，得出先验分布是超参数为$\vec{alpha}$的Dirichlet分布的Unigram Model，文档生成概率如下（这个公式比较重要，我们后面会用到，记为<span id="jump">公式3.1</span>。）</p>
+<span>$$\begin{align} 
+p(\vec{W}|\vec{\alpha})&amp; =\int p(\vec{W}|\vec{p}) \cdot p(\vec{p}|\vec{\alpha})d\vec{p}\\\\
+&amp;=\int \prod_{i=1}^{N}p_i^{n_i}\cdot Dir(\vec{p}|\vec{\alpha}))d\vec{p} \\\\
+&amp;=\int \prod_{i=1}^{N}p_i^{n_i} \cdot \frac{1}{\Delta (\vec{\alpha})} \prod_{i=1}^{N}p_i^{\alpha_i-1}d\vec{p} \\\\
+&amp;=\frac{1}{\Delta (\vec{\alpha})}\int \prod_{i=1}^{N}p_i^{n_i+\alpha_i-1}\vec{p}\\\\
+&amp;=\frac{\Delta(\vec{n}+\vec{\alpha})}{\Delta (\vec{\alpha})}
+\end{align}$$</span><!-- Has MathJax -->
 <h3 id="主题模型"><a class="header-anchor" href="#主题模型">¶</a>主题模型</h3>
 <p>Unigram Model够简单，但不太符合我们日常的写作习惯。写作的人在写文档时，往往会先挑选一些主题。比如我在写这篇博客的时候，我想写一些关于机器学习，关于统计，关于工程实现方面的东西，那么我的这个多面体恐怕“煎饼果子”，“热干面”这样的词出现的概率就得很小，可当我写一些美食相关的博客时，这样一个多面体或许又显得有些不够用。</p>
 <p>主题模型很好地解决了这一问题，相比Unigram Model，它添加了主题层，让文档生成的方式更加自然合理。一篇文章往往由多个主题构成，一个主题可以由多个与之相关的词语来描述。简单来说，当我们现在要创作一篇文当时，我们并不是只有一个大的多面体了，而是有多个“主题多面体”。在计算机主题相关的多面体上，内存、硬盘、复杂度、编程这些词出现的概率会更大；而在音乐相关的主题上。莫扎特、钢琴、二分音符、C大调这样的词出现的概率会更大。</p>
@@ -606,8 +627,125 @@ Semantic Analysis）模型中进行了明确的数学化。PLSA在对文档主�
 <p>每篇文档生成的概率和整个语料库生成的概率就可以由多个多项分布的联合分布求出来，具体公式这里略去，我们直接开始讲LDA。</p>
 <h3 id="lda文本主题建模"><a class="header-anchor" href="#lda文本主题建模">¶</a>LDA文本主题建模</h3>
 <p>好了，终于到LDA了。</p>
-<p>细心的你一定会想，unigram model中多面体的概率能用贝叶斯估计，那PLSA是否也能用贝叶斯估计能。当然！如果把PLSA中doc-topic多面体和topic-word多面体每一面朝上的概率加上Drichlet先验分布，就得了LDA模型！简单来说，可以理解为LDA就是把PLSA中的概率估计改造成了一个贝叶斯估计，选用的先验分布是Drichlet分布。（下面这个图我个人觉得把$Dir(\vec{\beta)}$）指向右边的topic-word多面体会更好一些。</p>
-<img src="/2017/11/07/LDA-From-Zero/7.png" title="Figure 7. PLSA文档生成过程">
+<p>细心的你一定会想，unigram model中多面体的概率能用贝叶斯估计，那PLSA是否也能用贝叶斯估计能。当然！如果把PLSA中doc-topic多面体和topic-word多面体每一面朝上的概率加上Drichlet先验分布，就得了LDA模型！简单来说，可以理解为LDA就是把PLSA中的概率估计改造成了一个贝叶斯估计，选用的先验分布是Drichlet分布。（下面这个图我个人觉得把$Dir(\vec{\beta)}$）指向右边的topic-word多面体会更好一些。)</p>
+<img src="/2017/11/07/LDA-From-Zero/7.png" title="Figure 7. LDA文档生成过程">
+<p>每一篇文章的主题分布服从Dirichlet-Multi共轭结构，这样的结构一共有M个；每一个主题的词分布也符合Dirichlet-Multi共轭结构，这样的结构一共有K个。LDA建模的本质么就是这个M+K个共轭结构和他们之间的关系，LDA模型的求解也就是求这M+K个共轭结构构成的联合分布的期望。</p>
+<p>如果觉得这段话不好理解，也没关系，下面我们开始列公式，我们可以直接从公式中看出LDA模型的本质。</p>
+<p>为了更好的讲解公式，统一用法，减少歧义，我们现在把即将用到的公式中的每一个变量和参数列在下面，供读者查阅。</p>
+<blockquote>
+<ul>
+<li>K:主题个数</li>
+<li>V：语料库中所有的、无重复的词语个数</li>
+<li>M: 语料库中文档数量</li>
+<li>$\vec{\alpha}$：doc-topic多面体的先验分布的超参数，维数为K。</li>
+<li>$\vec{\beta}$：topic-word多面体的先验分布的超参数，维数为V。</li>
+<li>$\vec{\theta}_m$： 第m篇文档的主题分布，即这篇文档的doc-topic多面体投掷时出现每一个topic的概率，维度为K。</li>
+<li>$\vec{\varphi}_k$： 第k个主题的词分布，即这个主题的topic-word多面体投掷时出现每一个word的概率，维度为V</li>
+<li>$N_m$： 语料库中第m篇文档的词数量</li>
+<li>$\vec{z}$：整个语料库的每一个词的主题构成的向量</li>
+<li>$\vec{z}_m$：第m篇文档的每一个词的主题构成的向量，维度为N_m</li>
+<li>$z_{m,n}$：第m篇文档的第n个词的主题</li>
+<li>$w_{m,n}$：第m篇文档的第n个词的具体词语</li>
+<li>$\vec{n}_m=(n_m ^1,\cdots,n_m ^K)$：$n_m ^K$表示在语料库中，第m篇文档中属于主题k的词语的个数。</li>
+<li>$\vec{w}_k=(v_k ^1,\cdots,v_k ^V)$：第k个主题下每个词的个数。$v_k ^t$表示在语料库中，第k个主题包含的某一个具体的词语V的个数。</li>
+</ul>
+<blockquote>
+<ul>
+<li>$\vec{w}=(\vec{w}_1,\cdots,\vec{w}_k)$：所有主题下的每个词的个数。</li>
+</ul>
+</blockquote>
+</blockquote>
+<p>先上概率图。</p>
+<img src="/2017/11/07/LDA-From-Zero/8.png" title="Figure 8. LDA概率图">
+<p>由概率图和文档生成过程我们可以将LDA中每一个词生成的过程分解为两个大的物理过程，分别是</p>
+<p>1.生成每一个词对应的主题，$\vec{\alpha} \rightarrow \vec{\theta_m} \rightarrow z_{m,n}$。在这个过程中，首先根据超参数$\vec{\alpha}$采样得到第m篇文档的主题分布$\vec{\theta_m}$，相当于的到了一个doc-topic骰子；然后投掷这个骰子，得到第n个词对应的topic编号$z_{m,n}$。这里M篇文档对应M个Dirichlet-Multi共轭结构。</p>
+<p>2.根据主题生成具体的词，$\vec{\beta} \rightarrow \vec{\varphi_k} \rightarrow w_{m,n}$。在这个过程中，根据超参数$\vec{\beta}$采样得到第k个主题的词分布$\vec{\varphi_k}$，相当于的到了一个编号是$k=z_{m,n}$的topic-doc骰子；然后投掷这个骰子，得到第n个词对应的词$w_{m,n}$。这里K个主题对应K个Dirichlet-Multi共轭结构。</p>
+<p>需要注意的是，在这两个过程中，每一个Dirichlet-Multi共轭结构都是独立的。这也就意味着，不仅可以一次就把$w_{m,n}$具体的词语生成出来，也可以先生成所有的$z_{m,n}$,再生成所有的$w_{m,n}$，这两个过程是完全等价的。根据这一特性，我们可以把LDA的文档生成过程定义为如下形式。</p>
+<blockquote>
+<hr>
+<p><strong>LDA文档生成过程</strong></p>
+<hr>
+<p>假设：有两类多面体分别是</p>
+<ul>
+<li><strong>doc-topic多面体</strong>，一共有M个，每个doc-topic多面体有K个面，每个面对应一个主题编号。这个多面体每个面朝上的概率分布服从超参数为$\vec{\alpha}$的Dirichlet分布。</li>
+<li><strong>topic-word多面体</strong>，一共有K个，每个topic-word多面体有V个面，每个面对应一个词。这个多面体每个面朝上的概率分布服从超参数为$\vec{\beta}$的Dirichlet分布。</li>
+</ul>
+<hr>
+<p>过程：</p>
+<ol>
+<li>
+<p>选定每一篇文档的词语数量$N_m$；</p>
+</li>
+<li>
+<p>对第m篇文档，根据超参数$\vec{\alpha}$采样的到对应的doc-topic多面体。</p>
+</li>
+<li>
+<p>对第m篇文档的第n个词，投掷doc-topic多面体，得到该词的主题$z_{m,n}$。</p>
+</li>
+<li>
+<p>重复步骤3共$N_m$次，得到第m篇文档的每一个词的主题编号$\vec{z_m}$。</p>
+</li>
+<li>
+<p>重复步骤2-4共M次，得到每一篇文档的的每一个词的主题编号。（过程1结束）</p>
+</li>
+<li>
+<p>对第k个主题，根据超参数$\vec{\beta}$采样的到对应的topic-word多面体。</p>
+</li>
+<li>
+<p>对第m篇文档的第n个词，根据主题编号选择对应的topic-word多面体，投掷该多面体，得到对应的词$w_{m,n}$。</p>
+</li>
+<li>
+<p>重复步骤7，直到所有词都得到具体的词。（过程2结束）</p>
+</li>
+</ol>
+<hr>
+</blockquote>
+<p>从这一过程就可以很清晰的看出，LDA模型求解的过程实际上就是求这M+K个Dirichlet-Multi共轭结构下文档生成概率的联合分布了。那么Dirichlet-Multi共轭结构如何如何求解呢？</p>
+<p>在过程1中，超参数为$\vec{\alpha}$的第m篇篇文档下每一个词的主题编号生成概率，我们可以由<a href="#jump">公式3.1</a>得到</p>
+<p>$$p(\vec{z}_m|\vec{\alpha}) =\frac{\Delta(\vec{n}_m+\vec{\alpha})}{\Delta (\vec{\alpha})}$$</p>
+<p>同时，我们得到隐含参数$\vec{\theta}_m$的后验分布恰好是</p>
+<p>$$Dir(\vec{\theta}_m|\vec{n}_m+\vec{\alpha})$$</p>
+<p>整个语料库下的所有词的主题编号的生成概率就是每一篇文档的联合分布</p>
+<p>$$p(\vec{z}|\vec{\alpha}) =\prod_{m} ^{M} \frac{\Delta(\vec{n}_m+\vec{\alpha})}{\Delta (\vec{\alpha})}$$</p>
+<p>同样的道理，我们可以得到过程二中，每个主题下的词生成概率为
+$$p(\vec{w}_k|\vec{\beta}) =\frac{\Delta(\vec{v}_k+\vec{\beta})}{\Delta (\vec{\beta})}$$</p>
+<p>同时，我们得到隐含参数$\vec{\varphi}_k$的后验分布恰好是</p>
+<p>$$Dir(\vec{\varphi}_k|\vec{v}_k+\vec{\beta})$$</p>
+<p>对于整个语料库的所有词的生成过程来说，每一个词具体的主题编号也是最终决定词语的先决条件，但是无论选择哪一个主题编号，并不会改变着K个主题下的词分布(<strong>这一点很重要，可以将过程1和过程2分开来看</strong>)，所以有
+$$p(\vec{w}|\vec{z},\vec{\beta})=p(\vec{w}|\vec{\beta})=\prod_{k} ^{V} \frac {\Delta(\vec{v}_k+\vec{\beta})}{\Delta (\vec{\beta})}$$</p>
+<p>结合上面的式子，我们最终可以得到，两个过程加在一起，LDA模型的语料库的生成概率为</p>
+<p>$$p(\vec{w},\vec{z}|\vec{\alpha},\vec{\beta})=p(\vec{w},\vec{z}|\vec{\beta})\cdotp(\vec{z}|\vec{\alpha})=\prod_{k} ^{V} \frac {\Delta(\vec{v}<em>k+\vec{\beta})}{\Delta (\vec{\beta})} \cdot \prod</em>{m} ^{M} \frac{\Delta(\vec{n}_m+\vec{\alpha})}{\Delta (\vec{\alpha})}$$</p>
+<p>到这里，整个LDA模型的文档生成过程就介绍完了。LDA模型在实际应用中，就是要估计隐含变量$\vec{\theta}_m$和$\vec{\varphi}_k$的值，也就是要求出doc-topic多面体和topic-word多面体的每个面朝上的概率大小，由此我们可以去分析文档的主题分布和主题的词分布。那么，这两个概率大小究竟该怎么求呢，我们继续往下探讨。</p>
+<h2 id="lda模型的求解"><a class="header-anchor" href="#lda模型的求解">¶</a>LDA模型的求解</h2>
+<p>OK，模型的基本构成我们了解完了，接下来就要看模型的求解了。对于LDA模型来说，最基本的目标有两个：</p>
+<ul>
+<li>Training。根据一个已有的语料库，我们需要这个语料库用LDA方式生成过程中的参数$\vec{\theta}_m$和$\vec{\varphi}_k$，由此可以把生成这个语料库的LDA模型完全确定下来。</li>
+<li>Inference。对于一篇不在这个语料库中的文档，我们能够根据已经确定的LDA模型来计算这篇文档的主题分布。</li>
+</ul>
+<p>当然，要先进行Training，然后才能进行Inference。Training的过程实际上就是对于上一节中我们得到的$p(\vec{w},\vec{z}|\vec{\alpha},\vec{\beta})$分布求期望，由于$p(\vec{w})$是我们观测到的已知变量，实际上就是要求分布$p(\vec{z}|\vec{w}$的期望，也就是每一个词对应的最可能的主题编号。</p>
+<p>如何求这个期望是一个难题。早期的PLSA和LDA的求解都是基于最大期望（Expectation Maximization）算法做的，要对$p(\vec{w},\vec{z}|\vec{\alpha},\vec{\beta})$直接积分求解，这一过程的时间复杂度和空间复杂度都比较高，好处是可以得到精确解。在工程上和较新的一些关于主题模型的研究中，则往往采用Gibbs Sampling的方式求解。这种方式得到的是近似解，但是求解速度快，工程实现也比较简单。下面，我们就讲解如何通过Gibbs Sampling的方式求解LDA模型。</p>
+<h3 id="采样"><a class="header-anchor" href="#采样">¶</a>采样</h3>
+<p>Sampling，就是采样。理解Gibbs Sampling的基础，是要明白采样的目的和原理。**所谓采样，是指获得符合某一概率分布的一些列样本，根据大数定律，当这些样本足够多时，样本的期望会逐渐趋近于概率分布的期望。**也就是说，采样的目的就是通过样本期望去估计分布的期望。</p>
+<p>举个例子，有一个每个面大小不相同的骰子，现在想知道每个面朝上的概率大小是多少，怎么做？最先想到的最简单的方法，就是采样。不断投掷这个骰子，记录下每次投掷朝上的面，然后计算这些面出现的次数占总次数比，就可以大致的估计每个面朝上的概率。</p>
+<p>对LDA求解也是一样，直接求解期望很麻烦，那么我们不妨通过采样得到一系列符合联合分布的样本，计算样本的期望就可以估计分布的期望。如何得到符合联合分布的样本呢，这就要引入另一组数学知识——马氏链和蒙特卡洛方法。</p>
+<h3 id="马氏链"><a class="header-anchor" href="#马氏链">¶</a>马氏链</h3>
+<p>马氏链（Markov Chain）的数学定义很简单，
+$$P(X_{t+1}=x|X_t,X_{t-1},\cdots)=P(X_{t+1}=x|X_t\cdots)$$
+即在一个状态转移链中，如果下一时刻状态转移的概率只和当前状态有关，那么这个转移链就是一个马氏链。</p>
+<p>用一个例子来说明马氏链和马氏链产生的过程。（这个例子我实在《LDA数学八卦》里看到的，不过网上还想用烂了）社会学家经常把人按其经济状况分成3类：下层(lower-class)、中层(middle-class)、上层(upper-class)，我们用1,2,3 分别代表这三个阶层。社会学家们发现决定一个人的收入阶层的最重要的因素就是其父母的收入阶层。如果一个人的收入属于下层类别，那么他的孩子属于下层收入的概率是 0.65, 属于中层收入的概率是 0.28, 属于上层收入的概率是 0.07。事实上，从父代到子代，收入阶层的变化的转移概率如下。</p>
+<img src="/2017/11/07/LDA-From-Zero/10.png" title="Figure 9. 转移概率表">
+<img src="/2017/11/07/LDA-From-Zero/9.png" title="Figure 10. 转移概率图">
+<p>我们用矩阵的形式表示，状态转移矩阵记为</p>
+<p>$$P=\begin{bmatrix}
+0.65 &amp; 0.28 &amp; 0.07\\
+0.15 &amp; 0.67 &amp; 0.18\\
+0.12 &amp; 0.36 &amp; 0.52
+\end{bmatrix}$$</p>
+<p>我们假设当前这一代下、中、上层人口的比例是$\pi_0=[0.21,0.68,0.11]$，那么下一代的比例分布式$\pi_0=\pi_1\cdot P$，以此类推，可以计算前n代人中下、中、上层人口比例为</p>
+<img src="/2017/11/07/LDA-From-Zero/11.png">
+<p>从第7代开始，这个比例就不变了。这是偶然吗？换一个初始概率$\pi_0=[0.75, 0.15, 0.1]]$再试一次，前n代人中下、中、上层人口比例为</p>
+<img src="/2017/11/07/LDA-From-Zero/12.png">
+<p>第9代人的时候, 分布又收敛了。奇特的是，两次给定不同的初始概率分布，最终都收敛到概率分布$\pi=[0.286,0.489,0.225]$，也就是说收敛的行为和初始概率分布 $\pi_0$ 无关。这说明这个收敛行为主要是由概率转移矩阵P决定的。</p>
 <blockquote>
 <p>[1]Blei D M, Ng A Y, Jordan M I. Latent dirichlet allocation[J]. Journal of machine Learning research, 2003, 3(Jan): 993-1022.]</p>
 </blockquote>
@@ -908,7 +1046,7 @@ Semantic Analysis）模型中进行了明确的数学化。PLSA在对文档主�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#从扔硬币说起"><span class="nav-number">1.</span> <span class="nav-text">¶从扔硬币说起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二项分布"><span class="nav-number">1.1.</span> <span class="nav-text">¶二项分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贝叶斯估计"><span class="nav-number">1.2.</span> <span class="nav-text">¶贝叶斯估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#beta分布与共轭"><span class="nav-number">1.3.</span> <span class="nav-text">¶Beta分布与共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项分布与dirichlet共轭"><span class="nav-number">1.4.</span> <span class="nav-text">¶多项分布与Dirichlet共轭</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latent-dirichlet-allocation"><span class="nav-number">2.</span> <span class="nav-text">¶Latent Dirichlet allocation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unigram-model"><span class="nav-number">2.1.</span> <span class="nav-text">¶Unigram Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主题模型"><span class="nav-number">2.2.</span> <span class="nav-text">¶主题模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lda文本主题建模"><span class="nav-number">2.3.</span> <span class="nav-text">¶LDA文本主题建模</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#从扔硬币说起"><span class="nav-number">1.</span> <span class="nav-text">¶从扔硬币说起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二项分布"><span class="nav-number">1.1.</span> <span class="nav-text">¶二项分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贝叶斯估计"><span class="nav-number">1.2.</span> <span class="nav-text">¶贝叶斯估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#beta分布与共轭"><span class="nav-number">1.3.</span> <span class="nav-text">¶Beta分布与共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项分布与dirichlet共轭"><span class="nav-number">1.4.</span> <span class="nav-text">¶多项分布与Dirichlet共轭</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latent-dirichlet-allocation"><span class="nav-number">2.</span> <span class="nav-text">¶Latent Dirichlet allocation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unigram-model"><span class="nav-number">2.1.</span> <span class="nav-text">¶Unigram Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主题模型"><span class="nav-number">2.2.</span> <span class="nav-text">¶主题模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lda文本主题建模"><span class="nav-number">2.3.</span> <span class="nav-text">¶LDA文本主题建模</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lda模型的求解"><span class="nav-number">3.</span> <span class="nav-text">¶LDA模型的求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#采样"><span class="nav-number">3.1.</span> <span class="nav-text">¶采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#马氏链"><span class="nav-number">3.2.</span> <span class="nav-text">¶马氏链</span></a></li></ol></li></ol></div>
             
 
           </div>
