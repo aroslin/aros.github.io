@@ -99,7 +99,11 @@
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/9.png">
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/11.png">
 <meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/12.png">
-<meta property="og:updated_time" content="2017-12-04T13:28:30.949Z">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/13.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/14.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/15.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/07/LDA-From-Zero/16.png">
+<meta property="og:updated_time" content="2018-01-05T12:38:13.535Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从零开始学LDA（Latent Dirichlet allocation）">
 <meta name="twitter:description" content="去年初学LDA，看完了Rickjin老师的《LDA数学八卦》，觉得不是很懂，查阅了很多资料之后才对LDA有了更深入地认识。一直想加入自己的理解后更简单的讲述这个模型，今日补上。 注：文章的行文思路与大多数公式参考了Rickjin《LDA数学八卦》。有兴趣更深入了解的同学可以在看完本篇后继续阅读。  LDA(Latent Dirichlet allocation)是主题模型的一种，最早是由Blei">
@@ -541,7 +545,7 @@ $$\Delta (\vec{\alpha})=\int\coprod_{i} ^ {k}x ^{\alpha-1}_id \vec {x}$$</p>
 <p>而Dirchlet分布的期望等于</p>
 <p>$$E(\vec{p})=(\frac{\alpha_1}{\sum_{k}^{i}\alpha_i},\frac{\alpha_2}{\sum_{k} ^ {i}\alpha_i}, \ldots ,\frac{\alpha_N}{\sum_{k} ^{i}\alpha_i})$$</p>
 <p>多项分布与Dirihlet分布是整个LDA模型构建的基础。了解它们的特性对于理解和改进LDA模型会有很大的帮助。至于LDA模型到底是什么，我们下节继续。</p>
-<h2 id="latent-dirichlet-allocation"><a class="header-anchor" href="#latent-dirichlet-allocation">¶</a>Latent Dirichlet allocation</h2>
+<h2 id="latent-dirichlet-allocation"><a class="header-anchor" href="#latent-dirichlet-allocation">¶</a>Latent Dirichlet Allocation</h2>
 <p>OK，正餐来了。那么什么是LDA呢？让我们从Unigram Model开始说起。</p>
 <h3 id="unigram-model"><a class="header-anchor" href="#unigram-model">¶</a>Unigram Model</h3>
 <p>一篇文档是由许多词语构成的，事实上，抛开语法结构不谈，如果一篇文章是由一些没有顺序的词语构成，我们仍能从一定程度理解文档在探讨的主题。就好像那句有趣的话一样</p>
@@ -714,7 +718,7 @@ $$p(\vec{w}_k|\vec{\beta}) =\frac{\Delta(\vec{v}_k+\vec{\beta})}{\Delta (\vec{\b
 <p>对于整个语料库的所有词的生成过程来说，每一个词具体的主题编号也是最终决定词语的先决条件，但是无论选择哪一个主题编号，并不会改变着K个主题下的词分布(<strong>这一点很重要，可以将过程1和过程2分开来看</strong>)，所以有
 $$p(\vec{w}|\vec{z},\vec{\beta})=p(\vec{w}|\vec{\beta})=\prod_{k} ^{V} \frac {\Delta(\vec{v}_k+\vec{\beta})}{\Delta (\vec{\beta})}$$</p>
 <p>结合上面的式子，我们最终可以得到，两个过程加在一起，LDA模型的语料库的生成概率为</p>
-<p>$$p(\vec{w},\vec{z}|\vec{\alpha},\vec{\beta})=p(\vec{w},\vec{z}|\vec{\beta})\cdotp(\vec{z}|\vec{\alpha})=\prod_{k} ^{V} \frac {\Delta(\vec{v}<em>k+\vec{\beta})}{\Delta (\vec{\beta})} \cdot \prod</em>{m} ^{M} \frac{\Delta(\vec{n}_m+\vec{\alpha})}{\Delta (\vec{\alpha})}$$</p>
+<p>$$p(\vec{w},\vec{z}|\vec{\alpha},\vec{\beta})=p(\vec{w},\vec{z}|\vec{\beta})\cdotp(\vec{z}|\vec{\alpha})=\prod_{k} ^{V} \frac {\Delta (\vec{v}  _k + \vec{\beta}) } { \Delta ( \vec{\beta}) } \cdot \prod _{m} ^{M} \frac{\Delta(\vec{n}_m+\vec{\alpha})}{\Delta (\vec{\alpha})}$$</p>
 <p>到这里，整个LDA模型的文档生成过程就介绍完了。LDA模型在实际应用中，就是要估计隐含变量$\vec{\theta}_m$和$\vec{\varphi}_k$的值，也就是要求出doc-topic多面体和topic-word多面体的每个面朝上的概率大小，由此我们可以去分析文档的主题分布和主题的词分布。那么，这两个概率大小究竟该怎么求呢，我们继续往下探讨。</p>
 <h2 id="lda模型的求解"><a class="header-anchor" href="#lda模型的求解">¶</a>LDA模型的求解</h2>
 <p>OK，模型的基本构成我们了解完了，接下来就要看模型的求解了。对于LDA模型来说，最基本的目标有两个：</p>
@@ -725,14 +729,14 @@ $$p(\vec{w}|\vec{z},\vec{\beta})=p(\vec{w}|\vec{\beta})=\prod_{k} ^{V} \frac {\D
 <p>当然，要先进行Training，然后才能进行Inference。Training的过程实际上就是对于上一节中我们得到的$p(\vec{w},\vec{z}|\vec{\alpha},\vec{\beta})$分布求期望，由于$p(\vec{w})$是我们观测到的已知变量，实际上就是要求分布$p(\vec{z}|\vec{w}$的期望，也就是每一个词对应的最可能的主题编号。</p>
 <p>如何求这个期望是一个难题。早期的PLSA和LDA的求解都是基于最大期望（Expectation Maximization）算法做的，要对$p(\vec{w},\vec{z}|\vec{\alpha},\vec{\beta})$直接积分求解，这一过程的时间复杂度和空间复杂度都比较高，好处是可以得到精确解。在工程上和较新的一些关于主题模型的研究中，则往往采用Gibbs Sampling的方式求解。这种方式得到的是近似解，但是求解速度快，工程实现也比较简单。下面，我们就讲解如何通过Gibbs Sampling的方式求解LDA模型。</p>
 <h3 id="采样"><a class="header-anchor" href="#采样">¶</a>采样</h3>
-<p>Sampling，就是采样。理解Gibbs Sampling的基础，是要明白采样的目的和原理。**所谓采样，是指获得符合某一概率分布的一些列样本，根据大数定律，当这些样本足够多时，样本的期望会逐渐趋近于概率分布的期望。**也就是说，采样的目的就是通过样本期望去估计分布的期望。</p>
+<p>Sampling，就是采样。理解Gibbs Sampling的基础，是要明白采样的目的和原理。<strong>所谓采样，是指获得符合某一概率分布的一些列样本，根据大数定律，当这些样本足够多时，样本的期望会逐渐趋近于概率分布的期望</strong>。也就是说，采样的目的就是通过样本期望去估计分布的期望。</p>
 <p>举个例子，有一个每个面大小不相同的骰子，现在想知道每个面朝上的概率大小是多少，怎么做？最先想到的最简单的方法，就是采样。不断投掷这个骰子，记录下每次投掷朝上的面，然后计算这些面出现的次数占总次数比，就可以大致的估计每个面朝上的概率。</p>
 <p>对LDA求解也是一样，直接求解期望很麻烦，那么我们不妨通过采样得到一系列符合联合分布的样本，计算样本的期望就可以估计分布的期望。如何得到符合联合分布的样本呢，这就要引入另一组数学知识——马氏链和蒙特卡洛方法。</p>
 <h3 id="马氏链"><a class="header-anchor" href="#马氏链">¶</a>马氏链</h3>
 <p>马氏链（Markov Chain）的数学定义很简单，
 $$P(X_{t+1}=x|X_t,X_{t-1},\cdots)=P(X_{t+1}=x|X_t\cdots)$$
 即在一个状态转移链中，如果下一时刻状态转移的概率只和当前状态有关，那么这个转移链就是一个马氏链。</p>
-<p>用一个例子来说明马氏链和马氏链产生的过程。（这个例子我实在《LDA数学八卦》里看到的，不过网上还想用烂了）社会学家经常把人按其经济状况分成3类：下层(lower-class)、中层(middle-class)、上层(upper-class)，我们用1,2,3 分别代表这三个阶层。社会学家们发现决定一个人的收入阶层的最重要的因素就是其父母的收入阶层。如果一个人的收入属于下层类别，那么他的孩子属于下层收入的概率是 0.65, 属于中层收入的概率是 0.28, 属于上层收入的概率是 0.07。事实上，从父代到子代，收入阶层的变化的转移概率如下。</p>
+<p>用一个例子来说明马氏链和马氏链产生的过程。（这个例子我实在《LDA数学八卦》里看到的，不过网上好像用烂了，最早应该也不是这本书中提出的）社会学家经常把人按其经济状况分成3类：下层(lower-class)、中层(middle-class)、上层(upper-class)，我们用1,2,3 分别代表这三个阶层。社会学家们发现决定一个人的收入阶层的最重要的因素就是其父母的收入阶层。如果一个人的收入属于下层类别，那么他的孩子属于下层收入的概率是 0.65, 属于中层收入的概率是 0.28, 属于上层收入的概率是 0.07。事实上，从父代到子代，收入阶层的变化的转移概率如下。</p>
 <img src="/2017/11/07/LDA-From-Zero/10.png" title="Figure 9. 转移概率表">
 <img src="/2017/11/07/LDA-From-Zero/9.png" title="Figure 10. 转移概率图">
 <p>我们用矩阵的形式表示，状态转移矩阵记为</p>
@@ -745,7 +749,191 @@ $$P(X_{t+1}=x|X_t,X_{t-1},\cdots)=P(X_{t+1}=x|X_t\cdots)$$
 <img src="/2017/11/07/LDA-From-Zero/11.png">
 <p>从第7代开始，这个比例就不变了。这是偶然吗？换一个初始概率$\pi_0=[0.75, 0.15, 0.1]]$再试一次，前n代人中下、中、上层人口比例为</p>
 <img src="/2017/11/07/LDA-From-Zero/12.png">
-<p>第9代人的时候, 分布又收敛了。奇特的是，两次给定不同的初始概率分布，最终都收敛到概率分布$\pi=[0.286,0.489,0.225]$，也就是说收敛的行为和初始概率分布 $\pi_0$ 无关。这说明这个收敛行为主要是由概率转移矩阵P决定的。</p>
+<p>第9代人的时候, 分布又收敛了。奇特的是，两次给定不同的初始概率分布，最终都收敛到概率分布$\pi=[0.286,0.489,0.225]$，也就是说收敛的行为和初始概率分布 $\pi_0$ 无关。这说明这个收敛行为主要是由概率转移矩阵P决定的。我们计算一下这个矩阵的n次方，可知</p>
+<p>$$ P^{20} =P^{21}=\cdots =P100=\cdots =\begin{bmatrix}
+0.286 &amp; 0.489 &amp; 0.225\\
+0.286 &amp; 0.489 &amp; 0.225\\
+0.286 &amp; 0.489 &amp; 0.225
+\end{bmatrix} $$</p>
+<p>当n足够大的时候，P^n的每一行都会收敛于分布$\pi=[0.286,0.489,0.225]$。这并不是这个过程特有的，这里我们引入一个非常重要的定理。</p>
+<blockquote>
+<p><strong>马氏链收敛定理</strong>：如果一个非周期马氏链具有转移概率矩阵P,且它的任何两个状态是连通的，那么$\lim_{n\rightarrow \infty }P_{ij}$ 存在且与i无关，记 $\lim_{n\rightarrow \infty }P_{ij}=\pi(j)$, 我们有</p>
+<p>1.$\lim_{n\rightarrow \infty }P^n =\begin{bmatrix}
+\pi(1) &amp; \pi(2) &amp;  \cdots &amp;\pi(j) &amp;\cdots \\
+\pi(1) &amp; \pi(2) &amp;  \cdots &amp;\pi(j) &amp;\cdots \\
+\cdots &amp; \cdots &amp;  \cdots &amp;\cdots &amp;\cdots \\
+\pi(1) &amp; \pi(2) &amp;  \cdots &amp;\pi(j) &amp;\cdots \\
+\cdots &amp; \cdots &amp;  \cdots &amp;\cdots &amp;\cdots \\
+\end{bmatrix} $</p>
+<p>2.$\pi(j)=\sum_{i=0}^{\infty }\pi(i)P_{ij}$</p>
+<p>3.$\pi$是方程$\pi P=\pi$的唯一非负解</p>
+<p>其中
+$$\pi=[\pi(1),\pi(2),\cdots,\pi(j),\cdots], \sum_{i=0}^{\infty} \pi_i =1$$
+$$P^n_{ij}指状态矩阵n次方的第i行第j列$$</p>
+</blockquote>
+<p>公式的证明以及更详细的说明这里不说了，在LDA中会用到的马氏链都是非周期的。关于马氏链的收敛定律，对理解LDA来说，最重要的是记住两点：</p>
+<ul>
+<li>平稳分布可以是离散的，也可以是连续的</li>
+<li><strong>对于一个转移矩阵为P的马氏链，在足够长（达到收敛）的步数之后，对象处在不同状态的概率是一定的，与时间无关</strong>。</li>
+</ul>
+<p>什么意思？其实我最早看马氏链的时候，觉得马氏链收敛定律的思想是好理解的，但是一直不是很明白这和采样有什么关系。我们还是用之前的社会阶层的例子来说明这个问题。</p>
+<p>现在我们不观察整个社会在不同阶层的分布了，而是集中到一个人和他的后代上。初始的分布$\pi(0)$对应的就是最初的这一个人落在不同阶层的概率。让这个人按这个概率落在一个阶层上，比如阶层1，那么他的后代就会按照状态转移矩阵的第一列对应的概率落在不同的阶层上。按照第一种情况，在第7代时整个社会的分布收敛到了平稳分布，也就是说第七代后代落在三个阶层的概率与第八代后代落在三个阶层的概率是一样的，与后面所有后代落在三个阶层的概率也是一样。那么如果把这个人第七代后代之后很多代的子孙所处的阶层记录下来，我们就得到了一组服从平稳分布的样本。</p>
+<p>根据马氏链收敛定律，不管初始分布是怎样的，在足够长（达到收敛）的步数之后，对象处在不同状态的概率是一定的，与时间无关。那么我们最初让观察对象随机的处在一个状态，让对象按照这个马氏链进行转移，达到足够长的步数，记录之后时刻对象的状态，就得到了服从平稳分布的一组样本。</p>
+<p>这一点意义重大！因为如果我们能构造一个转移矩阵P，使得马氏链的平稳分布正好符合我们预期的分布，那么从任意的初始状态出发，在足够长的步数之后，我们就能得到符合预期分布的样本，从而估计样本的期望。而MCMC算法，就正好运用了这一思想。</p>
+<h3 id="mcmc"><a class="header-anchor" href="#mcmc">¶</a>MCMC</h3>
+<p>Markov Chain Monte Carlo，从名字就能看出来，MCMC算法就是马氏链+蒙特卡洛。所谓蒙特卡洛，是对一类具有相同特性的随机算法的统称。<em>这类方法的特点是，可以在随机采样上计算得到近似结果，随着采样的增多，得到的结果是正确结果的概率逐渐加大，但在（放弃随机采样，而采用类似全采样这样的确定性方法）获得真正的结果之前，无法知道目前得到的结果是不是真正的结果</em>（摘自<a href="https://www.zhihu.com/question/20254139/answer/52255848" target="_blank" rel="external">知乎@陈义的回答</a>）</p>
+<p>举个例子，一个数组有一亿个数，我想知道他们的均值，就随机抽取其中的一些，把这些样本的均值当做总体的均值。我抽的越多，这个值越准，但是除非我把所有数遍历一边，不然我还不知道真正的结果。</p>
+<p>我们用MCMC方法来求解Beta分布期望的例子来说明MCMC算法的思路。这里蒙特卡洛就体现在，我们会去采样符合这个Beta分布的样本，样本越多，这个期望符合正确解的概率就越大，但是无论样本多大，只要是有限个，就不能认定是真实值。</p>
+<p>根据之前的思路，现在的目标是要构造一个转移矩阵P，使得平稳分布是Beta分布。如何构造呢，我们要引入下面一个定理：</p>
+<blockquote>
+<p><strong>马氏链收敛的细致平稳条件</strong></p>
+<p>如果非周期马氏链的转移矩阵P和分布$\pi(x)$满足
+$$\pi(i)P_{ij}=\pi(j)P_{ji}$$
+则 $\pi(x)$是马氏链的平稳分布，上式被称为细致平稳条件(detailed balance condition)。</p>
+</blockquote>
+<p>证明略去。公式很好理解，说的就是两个状态之间互相转移消耗的代价是相等的。总之这里重要的是我们要构造一个转移矩阵，让上面的公式成立。</p>
+<p>假设我们已经有一个转移矩阵为Q的马氏链，其中$q(i,j)$表示从状态i转移到状态j的概率，也就是矩阵的第i行第j列，也可以写成$q(i|j)$或者$q(i \rightarrow j)$，显然，通常情况下细致平稳条件不成立，</p>
+<p>$$p(i)q(i,j)\neq p(j)q(j,i)$$</p>
+<p>也就是说此时的p(x)不太可能是这个马氏链的平稳分布，为了满足这个平稳条件，我们不妨对马氏链进行简单的改造，引入一个参数$\alpha(i,j)$，使得</p>
+<p>$$p(i)q(i,j)\alpha(i,j)=p(j)q(j,i)\alpha(j,i)$$</p>
+<p>这样平稳细致条件就成立了诶，我们就可以做采样了。那么$\alpha(i,j)$又该怎么选呢？观察上式，不难发现，直接按对称性，可以取</p>
+<p>$$\alpha(i,j)=p(j)q(j,i)\quad \alpha(j,i)=p(i)q(i,j)$$</p>
+<p>此时有</p>
+<p>$$p(i)\underbrace{q(i,j)\alpha(i,j)} _{ {q}’ (i,j)} =p(j)\underbrace{q(j,i)\alpha(j,i)} _{ {q}’ (j,i)}$$</p>
+<p>这样转移矩阵为${Q}’$的马氏链满足平稳细致条件，平稳分布就是p(x)啦，就可以做采样啦~</p>
+<p>卧槽这是在干嘛？怎么这么随便就添加一个东西,然后这个东西其实还是原来的式子啊，怎么就能采样了😑😑😑</p>
+<p>我刚开始也这么想，但其实这正是这个算法的厉害之处。这里需要理解和注意的是，最开始的转移矩阵Q可以是任意构造的（只要满足任意两状态联通，保证马氏链可以收敛）！也就是说，实际上在整个过程中，我们真正重要的就是我们要采样的分布p(x)，其他的都是构造出来了。在知道p(x)的情况下，可以用这个方法对任意的分布做采样！牛逼之极！</p>
+<p>这里引入的$\alpha(i,j)$成为接受率，物理意义可以理解为在原来的马氏链上，从状态 i 以q(i,j) 的概率转跳转到状态j 的时候，我们以α(i,j)的概率接受这个转移，于是得到新的马氏链Q′的转移概率为q(i,j)，α(i,j)。一条马氏链可以看做是一个状态量在不断转移状态的过程，这里接受率可以理解为转移的过程改变成，每次转移时，先根据转移概率确定要转移到那个状态，然后再根据接受概率决定是否要发生转移。</p>
+<img src="/2017/11/07/LDA-From-Zero/13.jpg">
+<p>把整个采样的过程整理出来就是</p>
+<blockquote>
+<hr>
+<p><strong>MCMC采样算法</strong></p>
+<hr>
+<p>已知分布p(x)，要获得满足p(x)分布的样本</p>
+<p>下面过程中，$X_i$表示第i时刻的状态值</p>
+<hr>
+<p>1.随机初始化状态量。取$X _ 0$为p(x)分布中x可取到的一个随机值。</p>
+<p>2.构造转移矩阵Q。</p>
+<p>3.对之后的时刻，循环以下过程采样</p>
+<ul>
+<li>第t时刻状态量的值为$X _ t$,采样$y\sim q(x|X_t)$</li>
+<li>从均匀分布采样u~Uniform[0,1]</li>
+<li>如果$u&lt;alpha(x_t,y)=p(y)q(x_t,y)$,则接受转移$X_t \rightarrow y$,即$X_{t+1}=y$</li>
+<li>否则，不接受转移，$X_{t+1}=X_t$</li>
+</ul>
+<hr>
+</blockquote>
+<p>这里要多做一些解释，帮助大家理解。</p>
+<p>1.这个方法既可以用于离散的情况，也可以用于连续的情况。</p>
+<p>2.注意平稳细致条件保证的是样本会服从特定分布，而不是马氏链收敛的判断依据。根据马氏链收敛定理，样本点最终一定会收敛，但具体在哪一步收敛，很难判断。通常的做法是，取一个较大的步长n，从第n+1步才开始记录样本的状态。这里的n就叫做Burnin time。</p>
+<p>3.如何构造转移矩阵Q？只要保证任意两个状态都是联通的就行。这里联通不是指任意两状态都可以一步到达，只要没有孤立的状态就行。最简单的，我们可以令所有的$q(i,j)$相等,也就是任意两个状态之间的转移概率相同。</p>
+<p>4.采样$y\sim q(x|X_t)$是如何实现的？这里实际上就是当已知t时刻状态$X_t$，根据$X_t$转移到其他状态的概率做一个采样。比如何p(x)是之前例子中的$\pi=[0.286,0.489,0.225]$，转移矩阵Q满足所有$q(i,j)$相等，那么就是按转移到状态任意状态的概率都是1/3。在计算机中我们要做这样一个采样，通常会这样做：按照概率累加划定区间，比如三个状态概率都是0.33，那么第一个状态对应的区间是[0,0.33]，第二个状态对应的区间是[0.33,0.66]，第三个状态对应的区间是[0.66,1]。从均匀分布采样u~Uniform[0,1]，u落在那个区间，就取相应区间对应的状态值作为采样的值。</p>
+<p>5.为什么要引入接受率的概念？其实本质上，循环采样时，我们直接按$y\sim q(x|X_t)’=q(x|X_t)\alpha(x|X_t)$做采样，就可以得到符合p(x)分布的样本点了。但是$y\sim q(x|X_t)’$采样其实很难做，因为$\alpha(x|X_t)$包含$p(x)$，本质上还是要对p(x)做采样。p(x)只有在x确定的情况下比较好求值，而不好直接采样，不然咱用这方法干嘛是吧？这里，先从q采样再算rejection, 实际上等价于用 rejection sampling 从${q}’(x|X_t)$中直接采样了。</p>
+<p>这里的MCMC算法其实已经能很漂亮的工作啦，不过还有一点小问题，就是转移过程中，接受率$\alpha(i,j)$有可能偏小，这就导致采样过程中马氏链容易原地踏步，拒绝大量的跳转，这使得马氏链遍历所有的状态空间要花费太长的时间，收敛到平稳分布p(x)的速度太慢。有没有办法提升一些接受率，加快收敛呢?</p>
+<p>观察我们构造的平稳细致等式$p(i)q(i,j)\alpha(i,j)=p(j)q(j,i)\alpha(j,i)$，如果我们等比例的扩大$\alpha(i,j)$和$\alpha(j,i)$,接受率变大了，但是平稳细致条件是不会改变的。如果其中一个扩大到1，此时接受率达到最大值，有</p>
+<p>$$\alpha(i,j)=min \left\{ \frac{p(j)q(j,i)}{p(i)q(i,j)} ,1\right\}$$</p>
+<p>经过对上述MCMC 采样算法中接受率的改造，我们就得到了如下教科书中最常见的 Metropolis-Hastings 算法。M-H算法和上述MCMC算法的思路都是一样的，差异就只有接受率而已。</p>
+<blockquote>
+<hr>
+<p><strong>M-H采样算法</strong></p>
+<hr>
+<p>已知分布p(x)，要获得满足p(x)分布的样本</p>
+<p>下面过程中，$X_i$表示第i时刻的状态值</p>
+<hr>
+<p>1.随机初始化状态量。取$X _ 0$为p(x)分布中x可取到的一个随机值。</p>
+<p>2.构造转移矩阵Q。</p>
+<p>3.对之后的时刻，循环以下过程采样</p>
+<ul>
+<li>第t时刻状态量的值为$X _ t$,采样$y\sim q(x|X_t)$</li>
+<li>从均匀分布采样u~Uniform[0,1]</li>
+<li>如果$u&lt;alpha(x_t,y)=min \left\{ \frac{p(y)q(y,x_t)}{p(x_t)q(x_t,y)},1 \right\}$,则接受转移$X_t \rightarrow y$,即$X_{t+1}=y$</li>
+<li>否则，不接受转移，$X_{t+1}=X_t$</li>
+</ul>
+<hr>
+</blockquote>
+<p>OK,我们来看如何用M-H算法对Beta分布做采样。这里稳态分布为Beta分布
+$$p(\theta)=Beta(\theta|\alpha,\beta)=\frac{\theta^{\alpha-1}\cdot (1-\theta)^{\beta-1}}{B(\alpha,\beta)}$$，取转移矩阵q为各状态间的转移概率相同，则接受率</p>
+<span>$$\begin{align} 
+alpha(i,j) &amp;=min \left\{ \frac{p(j)q(j,i)}{p(i)q(i,j)},1 \right\}\\\\
+&amp;=min \left\{ \frac{p(j)}{p(i)},1 \right\}\\\\
+&amp;=min \left\{ \frac{j^{\alpha-1}(1-j)^{\beta-1}}{i^{\alpha-1}(1-i)^{\beta-1}},1 \right\}\\\\
+\end{align}$$</span><!-- Has MathJax -->
+<p>得到接受率的表达式后，我们就可以按上面提到的步骤开始做采样，具体步骤如下。</p>
+<blockquote>
+<p>1.随机初始化状态量。在Beta分布的取值范围[0,1]之间随机取一个值x_0,具体方法可以是采样x_0~Uniform[0,1]。</p>
+<p>2.对之后的时刻，循环以下过程采样</p>
+<ul>
+<li>第t时刻状态量的值为$X _ t$,采样$y\sim q(x|X_t)$。由于这里所有的状态间的转移概率都是相同的，实际上等价于在所有取值上做随机一个值，具体做法可以是y~Uniform[0,1]。</li>
+<li>从均匀分布采样u~Uniform[0,1]</li>
+<li>如果$u&lt;alpha(x_t,y)=min \left\{ \frac{y ^{\alpha-1}(1-y) ^{\beta-1}}{x_t ^{\alpha-1}(1-x_t) ^{\beta-1}},1 \right\}$,则接受转移$X_t \rightarrow y$,即$X_{t+1}=y$</li>
+<li>否则，不接受转移，$X_{t+1}=X_t$</li>
+</ul>
+</blockquote>
+<p>经过循环采样后，就可以得到一组服从beta分布的样本点，我们按照0.4为间隔将这些点放到不同的区间，统计区间数量，就可以得到下图所示的结果。无论是求期望还是曲线拟合，都可以通过采样来做近似。采样点越多，结果正确的可能就越大，但这中采样始终是一种近似，不把所有的点遍历，是无法得到完全正确结果的。</p>
+<img src="/2017/11/07/LDA-From-Zero/14.png">
+<h3 id="gibbs-sampling"><a class="header-anchor" href="#gibbs-sampling">¶</a>Gibbs Sampling</h3>
+<p>M-H算法已经可以很好的工作了，但是在高维（状态量不是一个而是一组）的情况，由于接受率的存在，状态遍历整个分布的效率还不够高。有没有可能找到一个转移矩阵Q，使接受率始终等于1呢？</p>
+<p>先看二维的情况。假设有一个分布概率p(x,y)，观察x相同的两个状态$A(x_1,y_1),B(x_1,y_2)$，(<strong>注意这里的(x,y)不是从y转移到x，为了做区分，之后统一用(x|y)的形式表示转移</strong>)，有
+$$p(x_1,y_1)p(y_2|x_1)=p(x_1)p(y_1|x_1)p(y_2|x_1)$$
+$$p(x_1,y_2)p(y_1|x_1)=p(x_1)p(y_2|x_1)p(y_1|x_1)$$</p>
+<p>右侧相同，所以得到
+$$p(x_1,y_1)p(y_2|x_1)=p(x_1,y_2)p(y_1|x_1)$$
+即
+$$p(A)p(y_2|x_1)=p(B)p(y_1|x_1)$$</p>
+<p>由此可以发现，在 $x=x_1$ 这条平行于y轴的直线上，如果使用条件分布 $p(y|x_1)$做为任何两个点之间的转移概率，那么任何两个点之间的转移满足细致平稳条件。同样的，如果我们在 $y=y_1$ 这条直线上任意取两个点$$A(x_1,y_1),C(x_2,y_1)$$,有如下等式</p>
+<p>$$p(A)p(x_2|y_1)=p©p(x_1|y_1)$$</p>
+<p>由此，我们可以构造任意两点之间转移矩阵Q</p>
+<ul>
+<li>$Q(A \rightarrow B)=p(y_B|x_1) \qquad if \quad x_A=x_B=x_1$</li>
+<li>$Q(A \rightarrow C)=p(x_C|y_1) \qquad if \quad y_A=y_C=y_1$</li>
+<li>$Q(A \rightarrow D)=0$</li>
+</ul>
+<img src="/2017/11/07/LDA-From-Zero/15.png">
+<p>由此构造的转移矩阵Q就是满足平稳细致条件的，容易验证</p>
+<p>$$p(X)Q(X|Y)=p(Y)p(Y|X)$$</p>
+<p>于是这个二维空间上的马氏链将收敛到平稳分布 p(x,y)。而这个算法就称为 Gibbs Sampling 算法。整理出来就是</p>
+<blockquote>
+<hr>
+<p><strong>二维Gibbs Sampling算法</strong></p>
+<hr>
+<p>已知分布p(x,y)，要获得满足p(x,y)分布的样本</p>
+<p>下面过程中，$X_i,Y_i$表示第i时刻的状态值</p>
+<hr>
+<p>1.随机初始化状态量$X_0,Y_0$。</p>
+<p>2.对之后的时刻，循环以下过程采样</p>
+<ul>
+<li>$y_{t+1}~p(y|x_t)$</li>
+<li>$x_{t+1}~p(x|y_{t+1})$</li>
+</ul>
+<hr>
+</blockquote>
+<p>太优雅了，比M-H算法看上去要简洁得多，数学家真TM都是天才。</p>
+<p>在上面的过程中，马氏链的转移就是沿着坐标轴并且轮换坐标轴转换的。这里每一个时刻最开始是x，或者y都是可以的，轮换知识一种方便的形式。最终便利整个概率分布空间，不同的区域密度反映了分布的概率密度。</p>
+<img src="/2017/11/07/LDA-From-Zero/16.png">
+<p>这种只能沿着坐标轴转移的方式就是Gibbs Sampling的特性，很容易把它推广到跟高维的情况。在n为空间中，对于概率分布$p(x_1,x_2,\cdots,x_n)$，可以定义如下矩阵</p>
+<p>1.如果当前状态是(x_1,x_2,\cdots,x_n)，马氏链转移的过程中，只能沿着坐标轴做转移。沿着$x_i$这根周转移时，转移概率由条件概率p（x_i|(x_1,x_2,\cdots,x_{i-1},x_{i+1},\cdots,x_n）定义。</p>
+<p>2.其他无法沿着坐标轴进行跳转的情况，转移概率都是0。</p>
+<p>由此，我们就把Gibbs Sampling算法从二维拓展到高维</p>
+<blockquote>
+<hr>
+<p><strong>Gibbs Sampling算法</strong></p>
+<hr>
+<p>已知分布$p(\vec{x})$，要获得满足$p(\vec{x})$分布的样本</p>
+<p>其中$\vec{x}={X_i;i=1,2,\cdots,n}$，下面过程中，$X_i^t$表示第i轴第t时刻的状态值</p>
+<hr>
+<p>1.随机初始化状态量$\vec{x}={X_i;i=1,2,\cdots,n}$。</p>
+<p>2.对之后的时刻，循环以下过程采样</p>
+<ul>
+<li>$x_ 1^{t+1} \sim p(x_ 1|x_ 2^t,x_ 3^t,\cdots,x_ n^t)$</li>
+<li>$x_ 2^{t+1} \sim p(x_ 2|x_ 1^{t+1},x_ 3^t,\cdots,x_ n^t)$</li>
+<li>$\cdots$</li>
+<li>$x_ j^{t+1} \sim p(x_ j|x_1^{t+1},\cdots,x_ {j-1}^{t+1},x_ {j+1}^t\cdots,x _ n^t)$</li>
+<li>$\cdots$</li>
+<li>$x_ n^{t+1} \sim p(x_ n|x_ 1^{t+1},x_ 2^{t+1},\cdots,x_ {n-1}^{t+1})$</li>
+</ul>
+<hr>
+</blockquote>
 <blockquote>
 <p>[1]Blei D M, Ng A Y, Jordan M I. Latent dirichlet allocation[J]. Journal of machine Learning research, 2003, 3(Jan): 993-1022.]</p>
 </blockquote>
@@ -1016,12 +1204,6 @@ $$P(X_{t+1}=x|X_t,X_{t-1},\cdots)=P(X_{t+1}=x|X_t\cdots)$$
                       <i class="fa fa-fw fa-github"></i>GitHub</a>
                 </span>
               
-                <span class="links-of-author-item">
-                  <a href="http://weibo.com/aroslin" target="_blank" title="微博">
-                    
-                      <i class="fa fa-fw fa-weibo"></i>微博</a>
-                </span>
-              
             
           </div>
 
@@ -1046,7 +1228,7 @@ $$P(X_{t+1}=x|X_t,X_{t-1},\cdots)=P(X_{t+1}=x|X_t\cdots)$$
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#从扔硬币说起"><span class="nav-number">1.</span> <span class="nav-text">¶从扔硬币说起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二项分布"><span class="nav-number">1.1.</span> <span class="nav-text">¶二项分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贝叶斯估计"><span class="nav-number">1.2.</span> <span class="nav-text">¶贝叶斯估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#beta分布与共轭"><span class="nav-number">1.3.</span> <span class="nav-text">¶Beta分布与共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项分布与dirichlet共轭"><span class="nav-number">1.4.</span> <span class="nav-text">¶多项分布与Dirichlet共轭</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latent-dirichlet-allocation"><span class="nav-number">2.</span> <span class="nav-text">¶Latent Dirichlet allocation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unigram-model"><span class="nav-number">2.1.</span> <span class="nav-text">¶Unigram Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主题模型"><span class="nav-number">2.2.</span> <span class="nav-text">¶主题模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lda文本主题建模"><span class="nav-number">2.3.</span> <span class="nav-text">¶LDA文本主题建模</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lda模型的求解"><span class="nav-number">3.</span> <span class="nav-text">¶LDA模型的求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#采样"><span class="nav-number">3.1.</span> <span class="nav-text">¶采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#马氏链"><span class="nav-number">3.2.</span> <span class="nav-text">¶马氏链</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#从扔硬币说起"><span class="nav-number">1.</span> <span class="nav-text">¶从扔硬币说起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二项分布"><span class="nav-number">1.1.</span> <span class="nav-text">¶二项分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贝叶斯估计"><span class="nav-number">1.2.</span> <span class="nav-text">¶贝叶斯估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#beta分布与共轭"><span class="nav-number">1.3.</span> <span class="nav-text">¶Beta分布与共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项分布与dirichlet共轭"><span class="nav-number">1.4.</span> <span class="nav-text">¶多项分布与Dirichlet共轭</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latent-dirichlet-allocation"><span class="nav-number">2.</span> <span class="nav-text">¶Latent Dirichlet Allocation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unigram-model"><span class="nav-number">2.1.</span> <span class="nav-text">¶Unigram Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主题模型"><span class="nav-number">2.2.</span> <span class="nav-text">¶主题模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lda文本主题建模"><span class="nav-number">2.3.</span> <span class="nav-text">¶LDA文本主题建模</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lda模型的求解"><span class="nav-number">3.</span> <span class="nav-text">¶LDA模型的求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#采样"><span class="nav-number">3.1.</span> <span class="nav-text">¶采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#马氏链"><span class="nav-number">3.2.</span> <span class="nav-text">¶马氏链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mcmc"><span class="nav-number">3.3.</span> <span class="nav-text">¶MCMC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gibbs-sampling"><span class="nav-number">3.4.</span> <span class="nav-text">¶Gibbs Sampling</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1066,7 +1248,7 @@ $$P(X_{t+1}=x|X_t,X_{t-1},\cdots)=P(X_{t+1}=x|X_t\cdots)$$
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-arrows-alt"></i>
   </span>
