@@ -7383,6 +7383,12 @@ function Snake(pos, dir, score, color, AI, stage, name, manager) {
 	    _isDead = false,
 	    _name = name,
 	    _textIdx = 0;
+	    if (name=="甜甜")
+	    	var _bitmap = new createjs.Bitmap("./css/sweet.jpg");
+	    else
+	    	var _bitmap = new createjs.Bitmap("./css/pale.jpg");
+	    _bitmap.scaleX = 0.05;
+	    _bitmap.scaleY = 0.05;
 
 	var INTERVAL_PATH_POINT = Setting.INTERVAL_PATH_POINT;
 	var ROTATE_SPEED = Setting.ROTATE_SPEED;
@@ -7405,6 +7411,10 @@ function Snake(pos, dir, score, color, AI, stage, name, manager) {
 			var pt_new = new Point();
 			initNextMemo(itr, pt_new);
 			_path.push(pt_new);
+
+			_bitmap.x=pt_new.x;
+			_bitmap.y=pt_new.y
+			_stage.addChild(_bitmap);
 			if (curbody << INTERVAL_PATH_POINT === itr) {
 				if (curbody == 0) {
 					// generateNode(pt_new.x, pt_new.y, _name);
@@ -7490,6 +7500,11 @@ function Snake(pos, dir, score, color, AI, stage, name, manager) {
 			node = _bodies[i];
 			MapManager.RefreshBlock(node, pos);
 			node.setTransform(pos.x, pos.y);
+			if(i==0){
+				_bitmap.setTransform(pos.x-35, pos.y-45);				
+				_bitmap.scaleX = 0.08;
+	    		_bitmap.scaleY = 0.08;
+			}
 		}
 	}
 
@@ -7850,7 +7865,7 @@ var SnakeManager = function () {
 			var angle = Math.random() * Math.PI * 2;
 
 			_parent = parent;
-			_player = this.createSnake(new Point(Setting.PLAYGROUND_WIDTH / 2, Setting.PLAYGROUND_HEIGHT / 2), new Point(Math.cos(angle), Math.sin(angle)), Setting.PLAYER_INIT_LENGTH, getRandomColor(), false, _parent, "player", this);
+			_player = this.createSnake(new Point(Setting.PLAYGROUND_WIDTH / 2, Setting.PLAYGROUND_HEIGHT / 2), new Point(Math.cos(angle), Math.sin(angle)), Setting.PLAYER_INIT_LENGTH, getRandomColor(), false, _parent, "甜甜", this);
 			var np = Math.floor(Math.random() * (names.length - Setting.ENEMY_SNAKE - 1)),
 			    inp = np;
 			for (var i = 0; i < Setting.ENEMY_SNAKE; i++) {

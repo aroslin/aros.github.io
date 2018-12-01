@@ -154,6 +154,8 @@ function Snake(pos, dir, score, color, AI, stage, name, manager) {
 			node = _bodies[i];
 			MapManager.RefreshBlock(node, pos);
 			node.setTransform(pos.x, pos.y);
+			if(i==0)
+				
 		}
 	}
 
